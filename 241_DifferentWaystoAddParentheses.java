@@ -12,7 +12,8 @@ public class Solution {
         for (int i = 0; i < input.length(); i++) {
             char curr = input.charAt(i);
             if (curr == '+' || curr == '-' || curr == '*') {
-                String leftPart = input.substring(0, i);
+                // Divide and Conquer here
+		String leftPart = input.substring(0, i);
                 String rightPart = input.substring(i+1);
                 List<Integer> leftRes = dfs(leftPart, map);
                 List<Integer> rightRes = dfs(rightPart, map);
