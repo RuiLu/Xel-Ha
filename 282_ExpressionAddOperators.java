@@ -20,7 +20,7 @@ public class Solution {
             for (int i = index; i < num.length(); i++) {
                 if (i != index && num.charAt(index) == '0') break; // IMPORTANT
                 long curr = Long.parseLong(num.substring(index, i + 1));
-                int len = sb.length();
+                int len = sb.length(); // Recording the length in order to do backtracking on StringBuilder
                 if (index == 0) {
                     helper(res, sb.append(curr), num, target, i + 1, curr, curr);
                     sb.setLength(len);
