@@ -1,11 +1,11 @@
 public class LRUCache {
     
-    /* 
-    HashMap -> store key/value pair
-    Doubld linked-list -> easy to delete and add node from head or tail  
-    */ 
+    /**
+     * 1. HashMap -> store key/value pair  
+     * 2. Doubled LinkedList -> easy to add and delete node from head and tail
+     */
     
-    private Map<Integer, Item> itemMap;
+    private HashMap<Integer, Item> itemMap;
     private int capacity;
     private int count;
     private Item fakeHead, fakeTail;
@@ -13,10 +13,22 @@ public class LRUCache {
     private class Item {
         int key;
         int value;
-        Item prev;
-        Item next;
+        Item next, prev;
+        
+        public Item() {}
+        
+        public Item(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
     }
     
+    /**
+     *  Three helper functions -> for double-linked list
+     *  1. add item to first
+     *  2. delete any item on list
+     *  3. move any item to list head
+     */
     private void addItem(Item item) {
         item.prev = fakeHead;
         item.next = fakeHead.next;
@@ -25,13 +37,13 @@ public class LRUCache {
         fakeHead.next = item;
     }
     
-    private void removeItem(Item item) {
+    private void deleteItem(Item item) {
         item.prev.next = item.next;
         item.next.prev = item.prev;
     }
     
     private void moveToHead(Item item) {
-        this.removeItem(item);
+        this.deleteItem(item);
         this.addItem(item);
     }
     
@@ -41,53 +53,43 @@ public class LRUCache {
         this.count = 0;
         
         fakeHead = new Item();
-        fakeHead.prev = null;
-        
         fakeTail = new Item();
-        fakeTail.next = null;
         
+        fakeHead.prev = null;
         fakeHead.next = fakeTail;
+        
+        fakeTail.next = null;
         fakeTail.prev = fakeHead;
     }
     
     public int get(int key) {
-        
         Item item = itemMap.get(key);
         
-        if (item == null) {
-            return -1;
-        } else {
-            this.moveToHead(item);
-        }
+        if (item == null) return -1;
+        else this.moveToHead(item);
         
         return item.value;
-        
     }
     
     public void set(int key, int value) {
-        
         Item item = itemMap.get(key);
         
         if (item == null) {
-            Item newItem = new Item();
-            newItem.key = key;
-            newItem.value = value;
-            
-            itemMap.put(key, newItem);
+            Item newItem = new Item(key, value);
             this.addItem(newItem);
+            itemMap.put(key, newItem);
             count++;
             
             if (count > capacity) {
-                Item tail = fakeTail.prev;
-                this.removeItem(tail);
-                itemMap.remove(tail.key);
+                Item deleteItem = fakeTail.prev;
+                this.deleteItem(deleteItem);
+                itemMap.remove(deleteItem.key);
                 count--;
             }
         } else {
             item.value = value;
             this.moveToHead(item);
         }
-        
     }
 }
     
