@@ -1,3 +1,7 @@
+/**
+ * Implement a inner class - Node, a node stores three parameters: 1.val; 2.min; 3.next,
+ * from which min is the minimum value from current node to the tail node
+ */ 
 class MinStack {
     
     private Node head = null;
@@ -22,15 +26,16 @@ class MinStack {
         return head.min;
     }
     
-    private class Node {
+    class Node {
         int val;
         int min;
         Node next;
         
-        private Node(int val, int min, Node next) {
+        public Node(int val, int min, Node next) {
             this.val = val;
             this.min = min;
             this.next = next;
         }
     }
+    
 }
