@@ -2,41 +2,39 @@
  *  Starting BFS from (i, j) where rooms[i][j] == 0
  */
 public class Solution {
+    
+    private int[][] dirs = {{1,0}, {0,1}, {-1,0}, {0, -1}};
+    
     public void wallsAndGates(int[][] rooms) {
         if (rooms == null || rooms.length == 0 || rooms[0].length == 0) return;
         
-        int row = rooms.length;
-        int col = rooms[0].length;
-        Queue<int[]> queue = new LinkedList<>();
+        int m = rooms.length, n = rooms[0].length;
+        Deque<int[]> queue = new ArrayDeque<>();
         
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (rooms[i][j] == 0) queue.offer(new int[]{i, j});
             }
         }
         
+        int level = 0;
+        
         while (!queue.isEmpty()) {
-            int[] curr = queue.poll();
-            int i = curr[0], j = curr[1];
-            int dist = rooms[i][j];
-            
-            if (i > 0 && rooms[i-1][j] == Integer.MAX_VALUE) {
-                rooms[i-1][j] = dist + 1;
-                queue.offer(new int[]{i-1, j});
+            int size = queue.size();
+            level++;
+            for (int i = 0; i < size; i++) {
+                int[] pos = queue.poll();
+                for (int[] dir : dirs) {
+                    int x = pos[0] + dir[0];
+                    int y = pos[1] + dir[1];
+                    
+                    if (x >= m || y >= n || x < 0 || y < 0 || rooms[x][y] != Integer.MAX_VALUE) continue;
+                    
+                    rooms[x][y] = level;
+                    queue.offer(new int[]{x, y});
+                }
             }
-            if (i < row - 1 && rooms[i+1][j] == Integer.MAX_VALUE) {
-                rooms[i+1][j] = dist + 1;
-                queue.offer(new int[]{i+1, j});
-            }
-            if (j > 0 && rooms[i][j-1] == Integer.MAX_VALUE) {
-                rooms[i][j-1] = dist + 1;
-                queue.offer(new int[]{i, j-1});
-            }
-            if (j < col - 1 && rooms[i][j+1] == Integer.MAX_VALUE) {
-                rooms[i][j+1] = dist + 1;
-                queue.offer(new int[]{i, j+1});
-            }
-        }    
+        }
     }
     
 }
