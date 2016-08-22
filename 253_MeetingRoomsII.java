@@ -8,6 +8,31 @@
  * }
  */
 public class Solution {
+    
+    /**
+     *  Second thought -> Use minHeap, and sort them by end time.
+     *                    Then calculate the size of priorityqueue at each time, which represents the number of meetings
+     *                    that are holding at that time
+     *  A little faster than above solution
+     */
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) return 0;
+        if (intervals.length == 1) return 1;
+        
+        Arrays.sort(intervals, (a, b) -> a.start - b.start);
+        PriorityQueue<Interval> pq = new PriorityQueue<>((a, b) -> a.end - b.end);
+        
+        int res = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < intervals.length; i++) {
+            while (!pq.isEmpty() && pq.peek().end <= intervals[i].start) pq.poll();
+            pq.offer(intervals[i]);
+            res = Math.max(res, pq.size());
+        }
+        
+        return res == Integer.MIN_VALUE ? 0 : res;
+    }
+    
     /**
      * First thought -> Take apart start and end times, distinguishing them by true and false.
      *                  Then calculateing the maximum overlap
@@ -49,28 +74,5 @@ public class Solution {
         return res;
     }
     
-    /**
-     *  Second thought -> Use minHeap, and sort them by end time.
-     *                    Then calculate the size of priorityqueue at each time, which represents the number of meetings
-     *                    that are holding at that time
-     *  A little faster than above solution
-     */
-    public int minMeetingRooms(Interval[] intervals) {
-        if (intervals == null || intervals.length == 0) return 0;
-        if (intervals.length == 1) return 1;
-        
-        Arrays.sort(intervals, (a, b) -> a.start - b.start); // Time complexity -> O(nlogn)
-        PriorityQueue<Interval> pq = new PriorityQueue<>((a, b) -> a.end - b.end); // minHeap
-        int max = 0;
-        
-        for (int i = 0; i < intervals.length; i++) {
-            while (!pq.isEmpty() && intervals[i].start >= pq.peek().end) pq.poll();
-            pq.offer(intervals[i]);
-            max = Math.max(max, pq.size());
-        }
-        
-        return max;
-    }
 }
-
 
