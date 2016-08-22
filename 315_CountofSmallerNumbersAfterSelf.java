@@ -1,48 +1,49 @@
 public class Solution {
+    
     /**
      *  2. Binary search tree -> Time complexity -> O(nlongn) (in the worst case, the time complexity will be O(n^2))
      *  Reference -> https://discuss.leetcode.com/topic/31405/9ms-short-java-bst-solution-get-answer-when-building-bst
      */
-    class TreeNode {
+    class BSTNode {
         int val;
-        int duplicate = 0;  // the number of duplicates
-        int leftSum = 0;    // the number of elements that are smaller than the current one (left child nodes)
-        TreeNode left, right;
-        public TreeNode(int val) {
-            this.val = val;
-        }
+        int leftSum = 0;
+        int duplicate = 0;
+        BSTNode left, right;
+        public BSTNode(int val) { this.val = val; }
     }
     
-    public List<Integer> countSmaller(int[] nums) {
-        Integer[] res = new Integer[nums.length];
-        if (nums.length == 0) return Arrays.asList(res);    // If using Arrays.asList(...), we need to use the same <T>
-        
-        TreeNode root = new TreeNode(nums[nums.length - 1]);
-        
-        for (int i = nums.length - 1; i >= 0; i--) {
-            res[i] = helper(root, nums[i]);    
-        }
-        
-        return Arrays.asList(res);
-    }
-    
-    private int helper(TreeNode node, int num) {
+    private int helper(int num, BSTNode node) {
         int sum = 0;
         
+        // iteration
         while (node.val != num) {
-            if (node.val > num) {
-                if (node.left == null) node.left = new TreeNode(num);
+            if (num < node.val) {
+                if (node.left == null) node.left = new BSTNode(num);
                 node.leftSum++;
                 node = node.left;
-            } else {
+            } else if (num > node.val) {
                 sum += node.leftSum + node.duplicate;
-                if (node.right == null) node.right = new TreeNode(num);
+                if (node.right == null) node.right = new BSTNode(num);
                 node = node.right;
             }
         }
         
         node.duplicate++;
         return sum + node.leftSum;
+    }
+    
+    public List<Integer> countSmaller(int[] nums) {
+        if (nums == null || nums.length == 0) return new ArrayList<Integer>();
+        
+        Integer[] count = new Integer[nums.length];
+        
+        BSTNode root = new BSTNode(nums[nums.length - 1]);
+        
+        for (int i = nums.length - 1; i >= 0; i--) {
+            count[i] = helper(nums[i], root);
+        }
+        
+        return Arrays.asList(count);
     }
     
     /**
