@@ -9,7 +9,7 @@
     _ -- [3,1,2,0]
 */
 public class Solution {
-    
+   
     /**
      *  1. DFS 
      */
@@ -53,4 +53,53 @@ public class Solution {
         
         return false;
     }
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] res = new int[numCourses];
+        if (prerequisites == null || prerequisites.length == 0 || prerequisites[0].length == 0) {
+            for (int i = 0; i < numCourses; i++) res[i] = i;
+            return res;
+        }
+        
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        Map<Integer, Integer> incomingDegree = new HashMap<>();
+        
+        for (int i = 0; i < numCourses; i++) incomingDegree.put(i, 0);
+        
+        for (int[] prerequisite : prerequisites) {
+            Set<Integer> set = new HashSet<>();
+            if (map.containsKey(prerequisite[1])) set = map.get(prerequisite[1]);
+            if (!set.contains(prerequisite[0])) {
+                set.add(prerequisite[0]);
+                map.put(prerequisite[1], set);
+                incomingDegree.put(prerequisite[0], incomingDegree.get(prerequisite[0]) + 1);   
+            }
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i : incomingDegree.keySet()) {
+            if (incomingDegree.get(i) == 0) queue.offer(i);
+        }
+        
+        List<Integer> tmp = new LinkedList<>();
+        
+        while (!queue.isEmpty()) {
+            int i1 = queue.poll();
+            tmp.add(i1);
+            
+            if (map.containsKey(i1)) {
+                for (int i2 : map.get(i1)) {
+                    incomingDegree.put(i2, incomingDegree.get(i2) - 1);
+                    if (incomingDegree.get(i2) == 0) queue.offer(i2);
+                }
+            }
+        }
+        
+        if (tmp.size() != numCourses) return new int[0]; // has cycle
+        
+        for (int i = 0; i < numCourses; i++) res[i] = tmp.get(i);
+        
+        return res;
+    }
+
 }
