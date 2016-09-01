@@ -1,3 +1,28 @@
+/**
+ * From Leetcode
+ */
+public class Solution {
+    /**
+     *  Time complexity -> O(n)
+     */
+    public boolean canPermutePalindrome(String s) {
+        if (s == null || s.length() == 0) return false;
+        
+        int[] c = new int[256];
+        int res = 0;
+        
+        for (char ch : s.toCharArray()) {
+            c[ch]++;
+            res += (c[ch] % 2 != 0) ? 1 : -1;
+        }
+        
+        return res <= 1;
+    }
+}
+
+/**
+ * From eclipse
+ */
 package com.palindrome;
 
 import java.util.*;
