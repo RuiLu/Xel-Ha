@@ -1,29 +1,26 @@
 public class Solution {
     /**
-     *  1. O(nk^2), try to sava it to O(nk) in method 2.
+     *  1. O(nk^2), try to save it to O(nk) in method 2.
      */
     public int minCostII(int[][] costs) {
-        if (costs == null || costs.length == 0) return 0;
+        if (costs == null || costs.length == 0 || costs[0].length == 0) return 0;
         
+        int res = Integer.MAX_VALUE;
         int n = costs.length;
         int k = costs[0].length;
         
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < k; j++) {
-                int res = Integer.MAX_VALUE;
+                int tmp = Integer.MAX_VALUE;
                 for (int x = 0; x < k; x++) {
-                    if (j == x) continue;
-                    res = Math.min(res, costs[i - 1][x]);
+                    if (x == j) continue;
+                    tmp = Math.min(tmp, costs[i - 1][x]);
                 }
-                costs[i][j] += res;
+                costs[i][j] += tmp;
             }
         }
         
-        int res = Integer.MAX_VALUE;
-        for (int i = 0; i < k; i++) {
-            res = Math.min(res, costs[n - 1][i]);
-        }
-        
+        for (int cost : costs[n - 1]) res = Math.min(res, cost);
         return res;
     }
     
@@ -33,10 +30,11 @@ public class Solution {
      *  Reference -> https://discuss.leetcode.com/topic/22580/ac-java-solution-without-extra-space
      */
     public int minCostII(int[][] costs) {
-        if (costs == null || costs.length == 0) return 0;
+        if (costs == null || costs.length == 0 || costs[0].length == 0) return 0;
         
-        int n = costs.length, k = costs[0].length;
         int min1 = -1, min2 = -1;
+        int n = costs.length;
+        int k = costs[0].length;
         
         for (int i = 0; i < n; i++) {
             int last1 = min1, last2 = min2;
