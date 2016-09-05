@@ -10,7 +10,7 @@ public class Solution {
         int max = nums[0], min = nums[0], res = nums[0];
         
         for (int i = 1; i < nums.length; i++) {
-            int maxTmp = max;
+            int maxTmp = max;	// Important, because the value of max might be changed
             max = Math.max(max * nums[i], Math.max(min * nums[i], nums[i]));
             min = Math.min(maxTmp * nums[i], Math.min(min * nums[i], nums[i]));
             if (max > res) res = max;
