@@ -28,6 +28,7 @@ public class RandomizedSet {
     public boolean remove(int val) {
         if (!map.containsKey(val)) return false;
         int loc = map.get(val);
+	// if deleted number is not the last one in nums, we need to swap it with the last one. O(1)
         if (loc != nums.size() - 1) {
             int lastOne = nums.get(nums.size() - 1);
             nums.set(loc, lastOne);
