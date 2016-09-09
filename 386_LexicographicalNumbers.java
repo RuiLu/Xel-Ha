@@ -24,4 +24,31 @@ public class Solution {
         
         return true;
     }
+
+    /**
+     *  Iteration
+     *  Reference -> https://discuss.leetcode.com/topic/55184/java-o-n-time-o-1-space-iterative-solution-130ms
+     *  Time complexity -> O(n)
+     *  Space complexity -> O(1)
+     */
+    public List<Integer> lexicalOrder(int n) {
+        List<Integer> res = new ArrayList<>();
+        if (n < 1) return res;
+        
+        int curr = 1;
+        
+        for (int i = 1; i <= n; i++) {
+            res.add(curr);
+            if (curr * 10 <= n) {
+                curr *= 10;
+            } else if (curr % 10 != 9 && curr + 1 <= n) {
+                curr++;
+            } else {
+                while ((curr / 10) % 10 == 9) curr /= 10;
+                curr = curr / 10 + 1;
+            }
+        }
+        
+        return res;
+    }
 }
