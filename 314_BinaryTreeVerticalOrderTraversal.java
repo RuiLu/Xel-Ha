@@ -9,6 +9,51 @@
  */
 public class Solution {
     /**
+     *  BFS
+     *  No need for TreeMap, only need HashMap
+     *  Using two queue, one for TreeNode and one for column number
+     *  Reference -> https://discuss.leetcode.com/topic/31954/5ms-java-clean-solution
+     */
+    public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        
+        /* Key is column number */
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        Queue<TreeNode> nodes = new LinkedList<>();
+        Queue<Integer> cols = new LinkedList<>();
+        int min = 0;
+        int max = 0;
+        
+        nodes.offer(root);
+        cols.offer(0);
+        
+        while (!nodes.isEmpty()) {
+            TreeNode curr = nodes.poll();
+            int col = cols.poll();
+            
+            if (!map.containsKey(col)) map.put(col, new ArrayList<>());
+            map.get(col).add(curr.val);
+            
+            if (curr.left != null) {
+                nodes.offer(curr.left);
+                cols.offer(col - 1);
+                min = Math.min(min, col - 1);
+            }
+            if (curr.right != null) {
+                nodes.offer(curr.right);
+                cols.offer(col + 1);
+                max = Math.max(max, col + 1);
+            }
+        }
+        
+        for (int i = min; i <= max; i++) res.add(map.get(i));
+        
+        return res;
+    } 
+
+
+    /**
      *  Using TreeMap
      *  Time complexity -> O(nlogn), where n is the total number of tree nodes
      *  Space complexity -> O(n)
