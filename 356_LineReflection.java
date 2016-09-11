@@ -13,16 +13,19 @@ public class Solution {
         for (int[] point : points) {
             max = Math.max(max, point[0]);
             min = Math.min(min, point[0]);
-            String str = point[0] + "-" + point[1];
-            set.add(str);
+            
+            String id = point[0] + "-" + point[1];
+            set.add(id);
         }
         
         int sum = max + min;
+        
         for (int[] point : points) {
-            String str = (sum - point[0]) + "-" + point[1];
-            if (!set.contains(str)) return false;
+            String id = (sum - point[0]) + "-" + point[1];
+            if (!set.contains(id)) return false;
         }
         
         return true;
     }
 }
+
