@@ -1,17 +1,21 @@
 public class Solution {
+    /**
+     *  The following final parameters are referred from ->
+     *  https://discuss.leetcode.com/topic/30488/short-clean-java-solution
+     */
     private final String[] BELOWTWENTY = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
     private final String[] TENS = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
     private final String[] THOUSANDS = {"", "Thousand", "Million", "Billion"};
     
     public String numberToWords(int num) {
-        if (num == 0)  return "Zero";
+        if (num == 0) return "Zero";
         
-        int i = 0;
         String res = "";
+        int i = 0;
         
         while (num > 0) {
             if (num % 1000 != 0) {
-                res = helper(num % 1000) + THOUSANDS[i] + " " + res; 
+                res = helper(num % 1000) + THOUSANDS[i] + " " + res;
             }
             num /= 1000;
             i++;
@@ -26,8 +30,9 @@ public class Solution {
         else if (num < 100) return TENS[num / 10] + " " + helper(num % 10);
         else return BELOWTWENTY[num / 100] + " Hundred " + helper(num % 100);
     }
+}
 
-
+public class Solution {
     /**
      *  The following final parameters are referred from ->
      *  https://discuss.leetcode.com/topic/30488/short-clean-java-solution
