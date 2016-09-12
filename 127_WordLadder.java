@@ -1,52 +1,50 @@
-public class Solution {
+c class Solution {
     /**
      *  Using two sets, with the idea of BFS
      */
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
-        int res = 1;
-        Set<String> beginSet = new HashSet<>();
-        Set<String> endSet = new HashSet<>();
+        if (wordList.size() == 0) return 0;
+        
+        int len = 1;
+        Set<String> begin = new HashSet<>();
+        Set<String> end = new HashSet<>();
         Set<String> visited = new HashSet<>();
         
-        beginSet.add(beginWord);
-        endSet.add(endWord);
+        begin.add(beginWord);
+        end.add(endWord);
         
-        while (!beginSet.isEmpty() && !endSet.isEmpty()) {
-            /* Swap size to make sure the sizes of two sets are roughly the same */
-            if (beginSet.size() > endSet.size()) {
-                Set<String> tmp = beginSet;
-                beginSet = endSet;
-                endSet = tmp;
+        while (!begin.isEmpty() && !end.isEmpty()) {
+            if (begin.size() > end.size()) {
+                Set<String> tmp = begin;
+                begin = end;
+                end = tmp;
             }
             
             Set<String> tmp = new HashSet<>();
-            for (String str : beginSet) {
+            for (String str : begin) {
                 char[] ca = str.toCharArray();
                 for (int i = 0; i < ca.length; i++) {
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        char oldC = ca[i];
-                        ca[i] = c;
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                        char old = ca[i];
+                        ca[i] = ch;
                         String next = String.valueOf(ca);
                         
-                        /* Build a connection between begin and end */
-                        if (endSet.contains(next)) return res + 1;
+                        if (end.contains(next)) return len + 1;
                         
                         if (wordList.contains(next) && !visited.contains(next)) {
                             tmp.add(next);
                             visited.add(next);
                         }
                         
-                        /* backtracking, return to original word */
-                        ca[i] = oldC;
+                        ca[i] = old;    // backtracking
                     }
                 }
             }
             
-            res++;
-            beginSet = tmp;
+            begin = tmp;
+            len++;
         }
         
         return 0;
     }
-    
 }
