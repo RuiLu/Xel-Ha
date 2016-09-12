@@ -1,9 +1,13 @@
-public class Solution {
+c class Solution {
     /**
      *  Without table, most naive way
      */
     public int[][] multiply(int[][] A, int[][] B) {
-        int m = A.length, n = B.length, l = B[0].length;
+        if (A == null || A.length == 0 || B == null || B.length == 0) return null;
+        
+        int m = A.length;
+        int n = A[0].length;
+        int l = B[0].length;
         int[][] res = new int[m][l];
         
         for (int i = 0; i < m; i++) {
