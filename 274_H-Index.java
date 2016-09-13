@@ -2,16 +2,16 @@ public class Solution {
     /**
      * First Attempt -> Time complexity -> O(nlogn)
      */
-    // public int hIndex(int[] citations) {
-    //     Arrays.sort(citations);
-    //     int len = citations.length;
-    //     for (int i = 0; i < citations.length; i++) {
-    //         if (len <= citations[i]) return len; // AT LEAST
-    //         else len--;
-    //     }
-    //     return 0;
-    // }
-    
+    public int hIndex(int[] citations) {
+        Arrays.sort(citations);
+        int len = citations.length;
+        for (int i = 0; i < citations.length; i++) {
+            if (len <= citations[i]) return len;    // at least
+            else len--;
+        }
+        
+        return 0;
+    }
     
     /**
      * Second Attempt -> Time complexity -> O(n), but needing more space
@@ -28,11 +28,11 @@ public class Solution {
         }
         
         int total = 0;
-        for (int i = len; i >= 0; i--) {
-            total += count[i];
-            if (total >= i) return i;
+        for (int index = len; index >= 0; index--) {
+            total += count[index];
+            if (index <= total) return index;
         }
         
         return 0;
-    } 
+    }
 }
