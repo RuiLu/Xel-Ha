@@ -9,16 +9,17 @@ public class Solution extends Relation {
      */
     public int findCelebrity(int n) {
         int candidate = 0;
+        /* First, find the celebrity candidate */
         for (int i = 1; i < n; i++) {
-            if (knows(candidate, i)) candidate = i;
+            if (!knows(i, candidate)) candidate = i;
         }
-        
+        /* Then, check if this selected candidate is real celebrity */
         for (int i = 0; i < n; i++) {
             if (i != candidate) {
+                /* If this candidate knows others, or other doesn't know this candidate, then fake. */
                 if (knows(candidate, i) || !knows(i, candidate)) return -1;
             }
         }
-        
         return candidate;
     }
 }
