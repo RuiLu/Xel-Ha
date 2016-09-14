@@ -3,22 +3,22 @@ public class Solution {
      *  Using a HashSet
      */
     public boolean isHappy(int n) {
-        if (n < 0) return false;
-        if (n == 1) return true;
-        
         Set<Integer> set = new HashSet<>();
         
+        int sum = 0;
+        
         while (set.add(n)) {
-            int squareSum = 0;
+            sum = 0;
             
             while (n > 0) {
                 int remain = n % 10;
-                squareSum += remain * remain;
+                sum += remain * remain;
                 n /= 10;
             }
             
-            if (squareSum == 1) return true;
-            else n = squareSum;
+            if (sum == 1) return true;
+            
+            n = sum;
         }
         
         return false;
