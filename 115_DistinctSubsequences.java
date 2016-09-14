@@ -8,17 +8,16 @@ public class Solution {
         int sLen = s.length();
         int tLen = t.length();
         
-        int[][] dp = new int[tLen + 1][sLen + 1];
+        int[][] dp = new int[tLen+1][sLen+1];
         
+        /* When t is "", there is only one match in s  */
         for (int j = 0; j <= sLen; j++) dp[0][j] = 1;
         
         for (int i = 0; i < tLen; i++) {
             for (int j = 0; j < sLen; j++) {
-                if (t.charAt(i) == s.charAt(j)) {
-                    dp[i + 1][j + 1] = dp[i + 1][j] + dp[i][j];
-                } else {
-                    dp[i + 1][j + 1] = dp[i + 1][j];
-                }
+                /* If matching, plus previous one in the same row and previous one in the above row */
+                if (t.charAt(i) == s.charAt(j)) dp[i+1][j+1] = dp[i+1][j] + dp[i][j];
+                else dp[i+1][j+1] = dp[i+1][j];
             }
         }
         
