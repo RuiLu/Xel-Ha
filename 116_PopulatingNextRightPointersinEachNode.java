@@ -13,15 +13,14 @@ public class Solution {
     public void connect(TreeLinkNode root) {
         if (root == null) return;
         
+        Queue<TreeLinkNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
         int currNum = 1;
         int nextNum = 0;
-        Queue<TreeLinkNode> queue = new LinkedList<>();
-        
-        queue.offer(root);
         
         while (!queue.isEmpty()) {
             TreeLinkNode curr = queue.poll();
-            
             currNum--;
             
             if (curr.left != null) {
