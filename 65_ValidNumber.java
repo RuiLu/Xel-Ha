@@ -17,16 +17,16 @@ public class Solution {
         
         for (int i = 0; i < s.length(); i++) {
             char curr = s.charAt(i);
-            if (curr >= '0' && curr <= '9') {
+            if (Character.isDigit(curr)) {
                 seenNumber = true;
                 seenNumberAfterE = true;
             } else if (curr == '.') {
-                if (seenPoint || seenE) return false;       
+                if (seenE || seenPoint) return false;
                 seenPoint = true;
             } else if (curr == 'e') {
                 if (seenE || !seenNumber) return false;
-                seenE = true;
                 seenNumberAfterE = false;
+                seenE = true;
             } else if (curr == '+' || curr == '-') {
                 if (i != 0 && s.charAt(i - 1) != 'e') return false;
             } else {
