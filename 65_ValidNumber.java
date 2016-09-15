@@ -8,12 +8,13 @@ public class Solution {
     public boolean isNumber(String s) {
         if (s == null || s.length() == 0) return false;
         
+        /* Important, we should first take the space from head and tail first */
         s = s.trim();
         
-        boolean seenPoint = false;
-        boolean seenE = false;
         boolean seenNumber = false;
         boolean seenNumberAfterE = true;
+        boolean seenPoint = false;
+        boolean seenE = false;
         
         for (int i = 0; i < s.length(); i++) {
             char curr = s.charAt(i);
@@ -21,12 +22,12 @@ public class Solution {
                 seenNumber = true;
                 seenNumberAfterE = true;
             } else if (curr == '.') {
-                if (seenE || seenPoint) return false;
+                if (seenPoint || seenE) return false;
                 seenPoint = true;
             } else if (curr == 'e') {
                 if (seenE || !seenNumber) return false;
-                seenNumberAfterE = false;
                 seenE = true;
+                seenNumberAfterE = false;
             } else if (curr == '+' || curr == '-') {
                 if (i != 0 && s.charAt(i - 1) != 'e') return false;
             } else {
@@ -36,4 +37,5 @@ public class Solution {
         
         return seenNumber && seenNumberAfterE;
     }
+
 }
