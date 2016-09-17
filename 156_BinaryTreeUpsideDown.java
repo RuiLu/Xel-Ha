@@ -10,7 +10,7 @@
 public class Solution {
     /**
      *  Iteration
-     *  Time complexity -> O(n)
+     *  Time complexity -> O(h), where h is the height of the tree
      */
     public TreeNode upsideDownBinaryTree(TreeNode root) {
         if (root == null) return root;
@@ -31,7 +31,7 @@ public class Solution {
         
         return prev;
     }
-
+    
     /**
      *  Recursion
      */
@@ -46,6 +46,5 @@ public class Solution {
         root.right = null;
         
         return newRoot;
-    }    
-    
+    }
 }
