@@ -12,23 +12,26 @@ public class Solution {
      *  Time complexity -> O(n)
      *  Reference -> https://discuss.leetcode.com/topic/28913/very-easy-java-solution-post-order-recursion
      */
+    int res = 0;
+    
     public int countUnivalSubtrees(TreeNode root) {
         if (root == null) return 0;
-        int[] res = new int[1];
-        postOrderDFS(root, res);
-        return res[0];
+        
+        postOrderDFS(root);
+         
+        return res;
     }
     
-    private boolean postOrderDFS(TreeNode node, int[] res) {
+    private boolean postOrderDFS(TreeNode node) {
         if (node == null) return true;
         
-        boolean left = postOrderDFS(node.left, res);
-        boolean right = postOrderDFS(node.right, res);
+        boolean left = postOrderDFS(node.left);
+        boolean right = postOrderDFS(node.right);
         
         if (left && right) {
-            if (node.left != null && node.left.val != node.val) return false;
-            if (node.right != null && node.right.val != node.val) return false;
-            res[0]++;
+            if (node.left != null && node.val != node.left.val) return false;
+            if (node.right != null && node.val != node.right.val) return false;
+            res++;
             return true;
         }
         
