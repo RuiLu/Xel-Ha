@@ -5,6 +5,9 @@ public class Solution {
      */
     public List<Integer> topKFrequent(int[] nums, int k) {
         List<Integer> res = new ArrayList<>();
+        
+        if (nums == null || nums.length == 0) return res;
+        
         List<Integer>[] bucket = new List[nums.length + 1];
         Map<Integer, Integer> map = new HashMap<>();
         
@@ -14,9 +17,8 @@ public class Solution {
         
         for (int key : map.keySet()) {
             int frequency = map.get(key);
-            if (bucket[frequency] == null) {
-                bucket[frequency] = new ArrayList<>();
-            }
+            
+            if (bucket[frequency] == null) bucket[frequency] = new ArrayList<>();
             bucket[frequency].add(key);
         }
         
@@ -32,20 +34,23 @@ public class Solution {
      */
     public List<Integer> topKFrequent(int[] nums, int k) {
         List<Integer> res = new ArrayList<>();
+        
+        if (nums == null || nums.length == 0) return res;
+        
         Map<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<Map.Entry<Integer, Integer>> pq = new PriorityQueue<>((a, b) -> b.getValue() - a.getValue());
         
         for (int num : nums) {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
         
-        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>((a, b) -> b.getValue() - a.getValue());
-        
-        /* time complexity -> O(klogk), where k is the size of map */
         for (Map.Entry<Integer, Integer> me : map.entrySet()) {
-            maxHeap.offer(me);
+            pq.offer(me);
         }
         
-        while (k-- > 0) res.add(maxHeap.poll().getKey());
+        while (k-- > 0) {
+            res.add(pq.poll().getKey());
+        }
         
         return res;
     }
