@@ -9,21 +9,26 @@ public class Solution {
         
         while (iter != 1) {
             if (iter == 3) return count + 2;
+            
+            count++;
+            
             if ((iter & 1) == 0) {
-                count++;
                 iter >>= 1;
                 continue;
             }
             
+            /**
+             *  If still don't understant why, can simply take 3 as an example 
+             *  3 -> 1. 3 -> 2 -> 1
+             *       2. 3 -> 4 -> 2 -> 1
+             *  Remerber consider about binary 
+             */
             if ((iter & 2) == 2) {
                 iter++;
-                count++;
             } else {
                 iter--;
-                count++;
             }
         }
-        
         
         return count;
     }
