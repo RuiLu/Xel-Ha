@@ -1,6 +1,7 @@
 public class Solution {
     /**
      *  Record the start position and end position
+     *  Time complexity -> O(n^2) in worst case, where n is the length of input string
      */
     public String longestPalindrome(String s) {
         if (s == null || s.length() < 2) return s;
