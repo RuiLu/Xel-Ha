@@ -5,27 +5,26 @@ public class Solution {
     public String longestPalindrome(String s) {
         if (s == null || s.length() < 2) return s;
         
-        int sLen = s.length();
-        int max = Integer.MIN_VALUE;
+        int maxLen = Integer.MIN_VALUE;
         int lo = 0;
         int hi = 0;
+        char[] sca = s.toCharArray();
+        int len = sca.length;
         
-        for (int i = 0; i < sLen; i++) {
-            /* Odd length */
-            for (int j = 0; i - j >= 0 && i + j < sLen && s.charAt(i - j) == s.charAt(i + j); j++) {
-                int len = j * 2 + 1;
-                if (max < len) {
-                    max = len;
+        for (int i = 0; i < len; i++) {
+            /* for odd length */
+            for (int j = 0; i - j >= 0 && i + j < len && sca[i - j] == sca[i + j]; j++) {
+                if (maxLen < 2 * j + 1) {
+                    maxLen = 2 * j + 1;
                     lo = i - j;
                     hi = i + j + 1;
                 }
             }
             
-            /* Even length */
-            for (int j = 1; i - j + 1 >= 0 && i + j < sLen && s.charAt(i - j + 1) == s.charAt(i + j); j++) {
-                int len = 2 * j;
-                if (max < len) {
-                    max = len;
+            /* for even length */
+            for (int j = 1; i - j + 1 >= 0 && i + j < len && sca[i - j + 1] == sca[i + j]; j++) {
+                if (maxLen < 2 * j) {
+                    maxLen = 2 * j;
                     lo = i - j + 1;
                     hi = i + j + 1;
                 }
