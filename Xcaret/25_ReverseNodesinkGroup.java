@@ -17,7 +17,6 @@ public class Solution {
         
         ListNode fakeHead = new ListNode(-1);
         fakeHead.next = head;
-        
         ListNode prev = fakeHead;
         ListNode tail = fakeHead;
         ListNode temp = null;
@@ -31,7 +30,7 @@ public class Solution {
                 tail = tail.next;
             }
             
-            if (tail == null) break;
+            if (tail == null) break;    // traverse to the end
             
             head = prev.next;   // prepare for next round
             
