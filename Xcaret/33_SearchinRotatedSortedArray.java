@@ -4,7 +4,7 @@ public class Solution {
      *  Time complexity -> O(logn)
      */
     public int search(int[] nums, int target) {
-        if (nums == null || nums.length == 0) return -1;
+        if (nums == null || nums.length == 0) return 0;
         
         int lo = 0;
         int hi = nums.length - 1;
