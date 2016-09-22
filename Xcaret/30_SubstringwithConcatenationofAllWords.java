@@ -9,9 +9,9 @@ public class Solution {
      */
     public List<Integer> findSubstring(String s, String[] words) {
         List<Integer> res = new ArrayList<>();
-        if (s == null || s.length() == 0 || words == null || words.length == 0) return res;
+        if (words == null || words.length == 0) return res;
         
-        int cnt = words.length;
+        int len = words.length;
         int wordLen = words[0].length();
         Map<String, Integer> map = new HashMap<>();
         
@@ -43,17 +43,18 @@ public class Solution {
                         }
                     }
                     
-                    if (count == cnt) {
-                        res.add(start);
-                        count--;
+                    if (count == len) {
                         String prev = s.substring(start, start + wordLen);
                         tmp.put(prev, tmp.get(prev) - 1);
+                        count--;
+                        res.add(start);
                         start += wordLen;
+                        
                     }
                 } else {
-                    tmp.clear();
                     count = 0;
                     start = j + wordLen;
+                    tmp.clear();
                 }
             }
         }
