@@ -1,21 +1,22 @@
 public class Solution {
     /**
-     *  Simple loop, greedy
+     *  Greedy.
+     *  Simple loop.
      *  Time complexity -> O(n)
      */
     public int jump(int[] nums) {
-        if (nums.length <= 1) return 0;
+        if (nums == null || nums.length <= 1) return 0;
         
         int steps = 0;
         int max = 0;
         int stop = 0;
         
-        for (int i = 0; i < nums.length -1; i++) {
+        for (int i = 0; i < nums.length; i++) {
             max = Math.max(max, i + nums[i]);
             
             if (i == stop) {
-                stop = max;
                 steps++;
+                stop = max;
             }
             
             if (stop >= nums.length - 1) break;
