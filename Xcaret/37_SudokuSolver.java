@@ -7,43 +7,40 @@ public class Solution {
         helper(board, 0, 0);
     }
     
-    private boolean helper(char[][] board, int x, int y) {
-        if (x == 9 && y == 0) return true;
+    private boolean helper(char[][] board, int i, int j) {
+        if (i == 9 && j == 0) return true;
         
-        if (board[x][y] != '.') return helper(board, y == 8 ? x + 1 : x, y == 8 ? 0 : y + 1);
+        if (board[i][j] != '.') return helper(board, j == 8 ? i + 1 : i, j == 8 ? 0 : j + 1);
         
         for (char ch = '1'; ch <= '9'; ch++) {
-            if (isValid(board, x, y, ch)) {
-                board[x][y] = ch;
-                if(helper(board, y == 8 ? x + 1 : x, y == 8 ? 0 : y + 1)) return true;
-                board[x][y] = '.';
+            if (isValid(board, i, j, ch)) {
+                board[i][j] = ch;
+                if (helper(board, j == 8 ? i + 1 : i, j == 8 ? 0 : j + 1)) return true;
+                board[i][j] = '.';
             }
         }
         
         return false;
     }
     
-    private boolean isValid(char[][] board, int x, int y, char ch) {
-        /* 1. check row */
-        for (int i = 0; i < 9; i++) {
-            if (board[i][y] == ch) return false;
+    private boolean isValid(char[][] board, int i, int j, char ch) {
+        /* check row */
+        for (int k = 0; k < 9; k++) {
+            if (board[k][j] == ch) return false;
         }
         
-        /* 2. check col */
-        for (int i = 0; i < 9; i++) {
-            if (board[x][i] == ch) return false;
+        /* check col */
+        for (int k = 0; k < 9; k++) {
+            if (board[i][k] == ch) return false;
         }
         
-        /* 3. check box */
-        int idxX = x / 3;
-        int idxY = y / 3;
-        for (int i = 3 * idxX; i < (3 * idxX + 3); i++) {
-            for (int j = 3 * idxY; j < (3 * idxY + 3); j++) {
-                if (board[i][j] == ch) return false;
+        /* check box */
+        for (int x = i / 3 * 3; x < i / 3 * 3 + 3; x++) {
+            for (int y = j / 3 * 3 ; y < j / 3 * 3 + 3; y++) {
+                if (board[x][y] == ch) return false;
             }
         }
         
         return true;
     }
-
 }
