@@ -11,8 +11,8 @@ public class Solution {
         if (s == null || s.length() <= 1) return 0;
         
         int max = 0;
-        int[] count = new int[s.length()];
         char[] sca = s.toCharArray();
+        int[] dp = new int[sca.length];
         Stack<Integer> stack = new Stack<>();
         
         for (int i = 0; i < sca.length; i++) {
@@ -20,9 +20,9 @@ public class Solution {
                 stack.push(i);
             } else if (!stack.isEmpty()) {
                 int start = stack.pop();
-                count[i] = i - start + 1;
-                if (start >= 1) count[i] += count[start - 1];
-                max = Math.max(max, count[i]);
+                dp[i] = i - start + 1;
+                if (start >= 1) dp[i] += dp[start - 1];
+                max = Math.max(max, dp[i]);
             }
         }
         
@@ -36,13 +36,13 @@ public class Solution {
     public int longestValidParentheses(String s) {
         if (s == null || s.length() <= 1) return 0;
         
+        int max = 0;
         char[] sca = s.toCharArray();
         int[] longest = new int[sca.length];
-        int max = 0;
         
         for (int i = 1; i < sca.length; i++) {
             if (sca[i] == ')' && i-1-longest[i-1] >= 0 && sca[i-1-longest[i-1]] == '(') {
-                longest[i] = longest[i-1] + 2 + ((i-2-longest[i-1] >= 0) ? longest[i-2-longest[i-1]] : 0);
+                longest[i] = longest[i-1] + 2 + (i-2-longest[i-1] >= 0 ? longest[i-2-longest[i-1]] : 0);
                 max = Math.max(max, longest[i]);
             }
         }
