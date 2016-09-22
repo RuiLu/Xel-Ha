@@ -6,6 +6,7 @@ public class Solution {
     public boolean isMatch(String s, String p) {
         int sLen = s.length();
         int pLen = p.length();
+        
         boolean[][] dp = new boolean[sLen+1][pLen+1];
         dp[0][0] = true;
         
@@ -17,17 +18,17 @@ public class Solution {
                     dp[i][j] = i > 0 && dp[i-1][j-1] && (curr == '?' || curr == s.charAt(i-1));
                 } else {
                     /**
-                     *  There are two situations here:
-                     *  1. '*' appears at the first position of p, so dp[i][j] = true;
-                     *  2. '*' appears at the other position of p, so we need to check the previous result.
+                     *  1. '*' is at the first position of pattern
+                     *  2. '*' is at the any position of pattern, except for the first position
                      */
+                    int k = i;
                     boolean isMatched = false;
-                    
-                    for (int k = i; k >= 0; k--) {
+                    while (k >= 0) {
                         if (dp[k][j-1]) {
                             isMatched = true;
                             break;
                         }
+                        k--;
                     }
                     
                     dp[i][j] = j == 1 || isMatched;
@@ -44,17 +45,18 @@ public class Solution {
     public boolean isMatch(String s, String p) {
         int sLen = s.length();
         int pLen = p.length();
+        
         boolean[][] dp = new boolean[sLen+1][pLen+1];
         dp[sLen][pLen] = true;
         
-        for (int j = pLen-1; j >= 0; j--) {
-            if (p.charAt(j) != '*') break;
-            dp[sLen][j] = true;
+        for (int k = pLen - 1; k >= 0; k--) {
+            if (p.charAt(k) != '*') break;
+            dp[sLen][k] = true;
         }
         
-        for (int i = sLen-1; i >= 0; i--) {
-            for (int j = pLen-1; j >= 0; j--) {
-                if (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i)) {
+        for (int i = sLen - 1; i >= 0; i--) {
+            for (int j = pLen - 1; j >= 0; j--) {
+                if (p.charAt(j) == '?' || s.charAt(i) == p.charAt(j)) {
                     dp[i][j] = dp[i+1][j+1];
                 } else if (p.charAt(j) == '*') {
                     dp[i][j] = dp[i+1][j] || dp[i][j+1];
