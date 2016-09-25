@@ -4,17 +4,19 @@ public class Solution {
      *  Time complexity -> O(n)
      */
     public int maxSubArray(int[] nums) {
-        if (nums == null || nums.length == 0) return 0;
-        
-        int maxSum = Integer.MIN_VALUE;
-        int[] dp = new int[nums.length + 1];
-        
-        for (int i = 0; i < nums.length; i++) {
-            dp[i+1] = Math.max(nums[i], nums[i] + dp[i]);
-            maxSum = Math.max(maxSum, dp[i+1]);
+        if (nums == null || nums.length == 0) {
+            return 0;
         }
         
-        return maxSum;
+        int[] dp = new int[nums.length+1];
+        int max = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < nums.length; i++) {
+            dp[i+1] = Math.max(nums[i], dp[i] + nums[i]);
+            max = Math.max(max, dp[i+1]);
+        }
+        
+        return max;
     } 
     
     /**
@@ -24,35 +26,33 @@ public class Solution {
      */
     public int maxSubArray(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
-        return helper(nums, 0, nums.length - 1);
+        return helper(nums, 0, nums.length-1);
     }
     
     private int helper(int[] nums, int lo, int hi) {
-        if (lo == hi) return nums[lo];
+        if (lo == hi) {
+            return nums[lo];
+        }
         
         int mid = (lo + hi) / 2;
         
-        /* 1. if the result does not contain the mid point */
         int left = helper(nums, lo, mid);
-        int right = helper(nums, mid + 1, hi);
+        int right = helper(nums, mid+1, hi);
         
-        /* 2. if the result does contain the mid point */
         int leftMax = nums[mid];
-        int rightMax = nums[mid + 1];
-        
+        int rightMax = nums[mid+1];
         int tmp = 0;
         for (int i = mid; i >= lo; i--) {
             tmp += nums[i];
             leftMax = Math.max(leftMax, tmp);
         }
-        
         tmp = 0;
-        for (int i = mid + 1; i <= hi; i++) {
-            tmp += nums[i];
+        for (int j = mid+1; j <= hi; j++) {
+            tmp += nums[j];
             rightMax = Math.max(rightMax, tmp);
         }
         
-        /* compare the above two situations, and find the larger answer */
+        
         return Math.max(Math.max(left, right), leftMax + rightMax);
     }
     
