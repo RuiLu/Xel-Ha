@@ -2,6 +2,9 @@ public class Solution {
     /**
      *  Binary search
      *  Time complexity -> O(logx)
+     *  Let's assume the result is n, so n must meet the following requirements:
+     *      1. (n+1)*(n+1) > x
+     *      2. n*n <= x
      */
     public int mySqrt(int x) {
         if (x == 0) return 0;
