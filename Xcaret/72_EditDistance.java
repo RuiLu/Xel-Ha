@@ -1,6 +1,7 @@
 public class Solution {
     /**
      *  Dynamic Programming
+     *  Time complexity -> O(mn)
      */
     public int minDistance(String word1, String word2) {
         int len1 = word1.length();
@@ -18,10 +19,10 @@ public class Solution {
         for (int i = 1; i <= len1; i++) {
             for (int j = 1; j <= len2; j++) {
                 if (word1.charAt(i-1) == word2.charAt(j-1)) {
-                    /* no need for operation */
+                    /* no need for any operation */
                     dp[i][j] = dp[i-1][j-1];
                 } else {
-                    /* 1. delete -> dp[i-1][j]; 2. insert -> dp[i][j-1]; 3. replace -> dp[i-1][j-1] */
+                    /* 1. insert->dp[i][j-1]; 2. delete->dp[i-1][j]; 3. replace->dp[i-1][j-1] */
                     dp[i][j] = Math.min(Math.min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1;
                 }
             }
