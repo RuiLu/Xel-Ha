@@ -5,18 +5,20 @@ public class Solution {
      *  Space complexity -> O(n)
      */
     public String simplifyPath(String path) {
-        if (path == null || path.length() == 0) return path;
+        if (path == null || path.length() == 0) return "";
         
-        StringBuilder sb = new StringBuilder();
         String[] tokens = path.split("/");
         String[] stack = new String[tokens.length];
+        StringBuilder sb = new StringBuilder();
         int count = 0;
         
         for (String token : tokens) {
             if (token.equals(".") || token.equals("")) {
                 continue;
             } else if (token.equals("..")) {
-                if (count > 0) count--;
+                if (count > 0) {
+                    count--;
+                }
             } else {
                 stack[count++] = token;
             }
