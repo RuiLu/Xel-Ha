@@ -8,10 +8,10 @@ public class Solution {
      */
     public int mySqrt(int x) {
         if (x == 0) return 0;
-        if (x < 4) return 1;
+        if (x <= 3) return 1;
         
         int lo = 0;
-        int hi = x;
+        int hi = x - 1;
         
         while (true) {
             int mid = (lo + hi) / 2;
