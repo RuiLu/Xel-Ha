@@ -4,19 +4,21 @@ public class Solution {
      *  Time complexity -> O(mn)
      */ 
     public int calculateMinimumHP(int[][] dungeon) {
-        if (dungeon == null || dungeon.length == 0 || dungeon[0].length == 0) return 0;
+        if (dungeon == null || dungeon.length == 0 || dungeon[0].length == 0) {
+            return 0;
+        }
         
-        int m = dungeon.length;
-        int n = dungeon[0].length;
-        int[][] hp = new int[m][n];
-        hp[m-1][n-1] = dungeon[m-1][n-1] < 0 ? 1-dungeon[m-1][n-1] : 1;
+        int row = dungeon.length;
+        int col = dungeon[0].length;
+        int[][] hp = new int[row][col];
         
-        for (int i = m-1; i >= 0; i--) {
-            for (int j = n-1; j >= 0; j--) {
-                if (i == m-1 && j == n-1) continue;
-                else if (i == m-1) {
+        for (int i = row - 1; i >= 0; i--) {
+            for (int j = col - 1; j >= 0; j--) {
+                if (i == row - 1 && j == col - 1) {
+                    hp[i][j] = Math.max(1 - dungeon[i][j], 1);
+                } else if (i == row - 1) {
                     hp[i][j] = Math.max(hp[i][j+1] - dungeon[i][j], 1);
-                } else if (j == n-1) {
+                } else if (j == col - 1) {
                     hp[i][j] = Math.max(hp[i+1][j] - dungeon[i][j], 1);
                 } else {
                     int down = Math.max(hp[i+1][j] - dungeon[i][j], 1);
