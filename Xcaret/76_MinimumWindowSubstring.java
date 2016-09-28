@@ -6,39 +6,44 @@ public class Solution {
      *  Time complexity -> O(n)
      */
     public String minWindow(String s, String t) {
-        int[] map = new int[128];
-        int counter = t.length();
-        int start = 0;
-        int end = 0;
-        int minStart = 0;
+        int minIndex = 0;
         int minLen = Integer.MAX_VALUE;
+        int counter = 0;
+        int begin = 0;
+        int end = 0;
+        int[] map = new int[128];
         char[] sca = s.toCharArray();
         
         for (char ch : t.toCharArray()) {
             map[ch]++;
+            counter++;
         }
         
         while (end < sca.length) {
+            /* when we meet a valid character in t */
             if (map[sca[end]] > 0) {
                 counter--;
             }
+            
+            /* deduct the meeting character by one, and move 'end' right */
             map[sca[end]]--;
             end++;
             
+            /* found all characters from t */
             while (counter == 0) {
-                if (end - start < minLen) {
-                    minStart = start;
-                    minLen = end - start;
+                if (end - begin < minLen) {
+                    minIndex = begin;
+                    minLen = end - begin;
                 }
                 
-                map[sca[start]]++;
-                if (map[sca[start]] > 0) {
+                if (map[sca[begin]] == 0) {
                     counter++;
                 }
-                start++;
+                map[sca[begin]]++;
+                begin++;
             }
         }
         
-        return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minIndex, minIndex + minLen);
     }
 }
