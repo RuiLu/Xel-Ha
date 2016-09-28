@@ -4,32 +4,38 @@ public class Solution {
      *  Time complexity -> O(n) , in worst case -> O(n^2)
      */
     public int lengthOfLongestSubstringTwoDistinct(String s) {
-        if (s == null || s.length() == 0) return 0;
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
         
+        int counter = 0;
+        int max = Integer.MIN_VALUE;
         int[] map = new int[128];
+        char[] sca = s.toCharArray();
         int begin = 0;
         int end = 0;
-        int counter = 0;
-        int maxLen = Integer.MIN_VALUE;
         
-        while (end < s.length()) {
-            if (map[s.charAt(end)] == 0) {
+        while (end < sca.length) {
+            /* meet a new character, we add one to counter */
+            if (map[sca[end]] == 0) {
                 counter++;
             }
-            map[s.charAt(end)]++;
+            map[sca[end]]++;
             end++;
             
+            /* when there are 3 distinct characters */
             while (counter > 2) {
-                if (map[s.charAt(begin)] == 1) {
+                map[sca[begin]]--;
+                /* map[sca[begin]] == 0 means that we have taken out one characters from current range */
+                if (map[sca[begin]] == 0) {
                     counter--;
-                }    
-                map[s.charAt(begin)]--;
+                }
                 begin++;
             }
             
-            maxLen = Math.max(maxLen, end - begin);
+            max = Math.max(max, end - begin);
         }
         
-        return maxLen == Integer.MAX_VALUE ? 0 : maxLen;
+        return max;
     }
 }
