@@ -11,9 +11,7 @@ public class Solution {
      *  Time complexity -> O(n)
      */
     public ListNode deleteDuplicates(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
+        if (head == null || head.next == null) return head;
         
         ListNode fakeHead = new ListNode(-1);
         fakeHead.next = head;
@@ -27,11 +25,11 @@ public class Solution {
             
             if (slow.next == fast) {
                 slow = fast;
-                fast = fast.next;
             } else {
                 slow.next = fast.next;
-                fast = slow.next;
             }
+            
+            fast = fast.next;
         }
         
         return fakeHead.next;
