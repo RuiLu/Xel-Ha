@@ -20,30 +20,28 @@ public class Solution {
                 left++;
             }
         }
-    }
+    } 
     
     private void swap(int[] nums, int i, int j) {
         int tmp = nums[i];
         nums[i] = nums[j];
         nums[j] = tmp;
     } 
-     
+    
     /**
      *  Using two passes, counting sort.
      *  Time complexity -> O(2n)
      */
     public void sortColors(int[] nums) {
         if (nums == null || nums.length == 0) return;
-        
-        int[] counts = new int[3];
+        int[] colors = new int[3];
+        int count = 0;
         for (int num : nums) {
-            counts[num]++;
+            colors[num]++;
         }
-        
-        int idx = 0;
-        for (int i = 0; i < counts.length; i++) {
-            while (counts[i]-- > 0) {
-                nums[idx++] = i;
+        for (int i = 0; i < 3; i++) {
+            while (colors[i]-- > 0) {
+                nums[count++] = i;
             }
         }
     }
