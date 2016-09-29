@@ -11,13 +11,15 @@ public class Solution {
      *  Time complexity -> O(n^2)
      */
     public int numTrees(int n) {
+        if (n <= 0) return 0;
+        
         int[] dp = new int[n+1];
         dp[0] = 1;
         dp[1] = 1;
         
         for (int level = 2; level <= n; level++) {
-            for (int j = 1; j <= level; j++) {
-                dp[level] += dp[j-1] * dp[level-j];
+            for (int k = 0; k < level; k++) {
+                dp[level] += dp[k] * dp[level-k-1];
             }
         }
         
