@@ -12,8 +12,9 @@ public class Solution {
      *  DFS
      */
     public boolean isSymmetric(TreeNode root) {
-        return root == null || isSymmetric(root.left, root.right);
-    } 
+        if (root == null) return true;
+        return isSymmetric(root.left, root.right);
+    }
     
     private boolean isSymmetric(TreeNode left, TreeNode right) {
         if (left == null || right == null) {
