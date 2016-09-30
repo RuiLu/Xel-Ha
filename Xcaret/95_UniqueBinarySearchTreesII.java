@@ -15,21 +15,20 @@ public class Solution {
      *  Time complexity -> O(2^n)
      */
     public List<TreeNode> generateTrees(int n) {
-        if (n <= 0) return new ArrayList<TreeNode>();
-        return getAllValidTrees(1, n);
+        if (n <= 0) return new ArrayList<>();
+        return buildTrees(1, n);
     }
     
-    private List<TreeNode> getAllValidTrees(int start, int end) {
+    private List<TreeNode> buildTrees(int lo, int hi) {
         List<TreeNode> res = new ArrayList<>();
-        
-        if (start > end) {
+        if (lo > hi) {
             res.add(null);
             return res;
         }
         
-        for (int i = start; i <= end; i++) {
-            List<TreeNode> leftRes = getAllValidTrees(start, i - 1);
-            List<TreeNode> rightRes = getAllValidTrees(i + 1, end);
+        for (int i = lo; i <= hi; i++) {
+            List<TreeNode> leftRes = buildTrees(lo, i - 1);
+            List<TreeNode> rightRes = buildTrees(i + 1, hi);
             
             for (TreeNode left : leftRes) {
                 for (TreeNode right : rightRes) {
