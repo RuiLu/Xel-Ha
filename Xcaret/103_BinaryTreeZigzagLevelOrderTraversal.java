@@ -17,29 +17,29 @@ public class Solution {
      *  
      */
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (root == null) return res;
-        dfs(res, root, 0);
-        return res;
-    } 
-    
-    private void dfs(List<List<Integer>> res, TreeNode curr, int level) {
-        if (curr == null) return;
-        
-        if (res.size() <= level) {
-            res.add(new ArrayList<>());
-        }
-        
-        if (level % 2 != 0) {
-            res.get(level).add(0, curr.val);
-        } else {
-            res.get(level).add(curr.val);
-        }
-        
-        dfs(res, curr.left, level + 1);
-        dfs(res, curr.right, level + 1);
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        zigzagTraversal(root, 0, result);
+        return result;
     }
-     
+    
+    private void zigzagTraversal(TreeNode node, int level, List<List<Integer>> result) {
+        if (node == null) return;
+        
+        if (result.size() <= level) {
+            result.add(new ArrayList<>());
+        }
+        
+        if (level % 2 == 0) {
+            result.get(level).add(node.val);
+        } else {
+            result.get(level).add(0, node.val);
+        }
+        
+        zigzagTraversal(node.left, level + 1, result);
+        zigzagTraversal(node.right, level + 1, result);
+    }
+    
     /**
      *  BFS with an indicator and an stack (FILO)
      *  We are not using Queue here as normal binary tree level order traversal.
