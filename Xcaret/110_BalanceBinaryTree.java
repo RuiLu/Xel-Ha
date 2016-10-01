@@ -9,7 +9,7 @@
  */
 public class Solution {
     /**
-     *  DFS to get heights of left subtree and right subtree respectively
+     *  DFS to get heights of left subtree and right subtree respectively, and compare their heights
      *  Time complexity -> O(n)
      */
     public boolean isBalanced(TreeNode root) {
@@ -23,9 +23,10 @@ public class Solution {
         int leftHeight = getHeight(node.left);
         int rightHeight = getHeight(node.right);
         
+        // if at least one of the two subtrees is not balanced, return -1 directly
         if (leftHeight == -1 || rightHeight == -1) return -1;
-        if (Math.abs(leftHeight - rightHeight) > 1) return -1;
         
-        return Math.max(leftHeight, rightHeight) + 1;
+        if (Math.abs(leftHeight - rightHeight) > 1) return -1;
+        else return Math.max(leftHeight, rightHeight) + 1;
     }
 }
