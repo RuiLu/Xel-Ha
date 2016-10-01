@@ -16,7 +16,7 @@ public class Solution {
      *          4. do it all over again until we get to leaves
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return buildTree(preorder, inorder, 0, preorder.length - 1, 0);
+        return buildTree(preorder, inorder, 0, inorder.length - 1, 0);
     }
     
     private TreeNode buildTree(int[] preorder, int[] inorder, int start, int end, int preIdx) {
