@@ -18,8 +18,8 @@ public class Solution {
     private int maxPathSum;
     
     public int maxPathSum(TreeNode root) {
-        maxPathSum = Integer.MIN_VALUE;
         if (root == null) return 0;
+        maxPathSum = Integer.MIN_VALUE;
         getMaxPathSum(root);
         return maxPathSum;
     }
@@ -27,11 +27,11 @@ public class Solution {
     private int getMaxPathSum(TreeNode node) {
         if (node == null) return 0;
         
-        int leftMax = Math.max(0, getMaxPathSum(node.left));
-        int rightMax = Math.max(0, getMaxPathSum(node.right));
+        // if the path sum from left or right subtree is negative, we can simply ignore it and set sum to zero
+        int left = Math.max(0, getMaxPathSum(node.left));
+        int right = Math.max(0, getMaxPathSum(node.right));
         
-        maxPathSum = Math.max(maxPathSum, leftMax + rightMax + node.val);
-        
-        return Math.max(leftMax, rightMax) + node.val;
+        maxPathSum = Math.max(maxPathSum, (left + right + node.val));
+        return Math.max(left, right) + node.val;
     }
 }
