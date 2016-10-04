@@ -9,6 +9,12 @@
 public class Solution {
     /**
      *  Second try -> avoid to use extra space
+     *  Idea -> Maintaining three variables 
+     *       -> 1. head - start point for next level traversal
+     *       -> 2. prev - the previous node of iter
+     *       -> 3. iter - used for traversing next pointer
+     *  
+     *  Reference -> https://discuss.leetcode.com/topic/1106/o-1-space-o-n-complexity-iterative-solution
      *  Time complexity -> O(n)
      *  Space complexity -> O(1)
      */
@@ -19,9 +25,10 @@ public class Solution {
         TreeLinkNode prev = null;
         TreeLinkNode iter = root;
         
+        // vertical traversal
         while (iter != null) {
+            // horizontal traversal
             while (iter != null) {
-                // left child
                 if (iter.left != null) {
                     if (prev != null) {
                         prev.next = iter.left;
@@ -31,7 +38,6 @@ public class Solution {
                     prev = iter.left;
                 }
                 
-                // right child
                 if (iter.right != null) {
                     if (prev != null) {
                         prev.next = iter.right;
@@ -41,7 +47,6 @@ public class Solution {
                     prev = iter.right;
                 }
                 
-                // move iter to next
                 iter = iter.next;
             }
             
