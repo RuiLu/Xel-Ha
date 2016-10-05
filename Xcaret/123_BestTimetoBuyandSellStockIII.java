@@ -9,7 +9,7 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int maxProfit(int[] prices) {
-        if (prices == null || prices.length < 1) return 0;
+        if (prices == null || prices.length <= 1) return 0;
         
         int firstBuy = Integer.MIN_VALUE;
         int firstSell = 0;
