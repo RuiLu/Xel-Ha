@@ -13,26 +13,33 @@ public class Solution {
     public int candy(int[] ratings) {
         if (ratings == null || ratings.length == 0) return 0;
         
-        int res = 0;
-        int[] candies = new int[ratings.length];
-        Arrays.fill(candies, 1);
+        int num = 0;
+        int len = ratings.length;
+        int[] candies = new int[len];
+
+        // first round -> assign each kid one candy
+        for (int i = 0; i < len; i++) {
+            candies[i] = 1;            
+        }
         
-        for (int i = 0; i < ratings.length - 1; i++) {
-            if (ratings[i] < ratings[i+1]) {
+        // second round -> from left to right, if previous rating if smaller, give one more candy to latter one
+        for (int i = 0; i < len - 1; i++) {
+            if (ratings[i+1] > ratings[i]) {
                 candies[i+1] = candies[i] + 1;
             }
         }
         
-        for (int i = ratings.length - 1; i > 0; i--) {
+        // third round -> do the same thing as the second round except that this time starts from right
+        for (int i = len - 1; i > 0; i--) {
             if (ratings[i-1] > ratings[i] && candies[i-1] <= candies[i]) {
                 candies[i-1] = candies[i] + 1;
-            } 
+            }
         }
         
         for (int candy : candies) {
-            res += candy;
+            num += candy;
         }
         
-        return res;
+        return num;
     }
 }
