@@ -58,51 +58,54 @@ public class Solution {
      *  Idea -> Union find
      *          Using a boolean[] to indicate whether a 'O' has connected to a edge 'O'
      */
-    private boolean[] edgeConnected = null;
     private int[] unionSet = null;
-     
+    private boolean[] edgeConnected = null;
+    
     public void solve(char[][] board) {
         if (board == null || board.length == 0 || board[0].length == 0) return;
         
         int row = board.length;
         int col = board[0].length;
         
-        edgeConnected = new boolean[row*col];
         unionSet = new int[row*col];
-        
         for (int i = 0; i < unionSet.length; i++) {
             unionSet[i] = i;
         }
         
+        edgeConnected = new boolean[row*col];
         for (int i = 0; i < edgeConnected.length; i++) {
             int x = i / col;
             int y = i % col;
-            edgeConnected[i] = (board[x][y] == 'O' && (x == 0 || y == 0 || x == row-1 || y == col-1));
+            edgeConnected[i] = (board[x][y] == 'O' && (x == 0 || y == 0 || x == row - 1 || y == col - 1));
         }
         
+        // union-find, to connect all 'O's that has a connection to edge
         for (int i = 0; i < unionSet.length; i++) {
             int x = i / col;
             int y = i % col;
             int up = x - 1;
             int right = y + 1;
-            if (up >= 0 && board[up][y] == board[x][y]) union(i, i-col);
-            if (right < col && board[x][right] == board[x][y]) union(i, i+1);
+            if (up >= 0 && board[x][y] == board[up][y]) union(i, i - col);
+            if (right < col && board[x][y] == board[x][right]) union(i, i + 1);
         }
         
-        for (int i = 0; i < edgeConnected.length; i++) {
+        // if the id of connected zone is the one that connected to the edge, then we don't change it
+        for (int i = 0; i < unionSet.length; i++) {
             int x = i / col;
             int y = i % col;
-            if (!edgeConnected[find(i)] && board[x][y] == 'O') board[x][y] = 'X';
+            if (!edgeConnected[find(i)] && board[x][y] == 'O') {
+                board[x][y] = 'X';
+            }
         }
     }
     
-    private void union(int i, int j) {
-        int rootI = find(i);
-        int rootJ = find(j);
+    private void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
         
-        boolean edgeC = edgeConnected[rootI] || edgeConnected[rootJ];
-        unionSet[rootI] = rootJ;
-        edgeConnected[rootJ] = edgeC;
+        boolean edgeC = edgeConnected[rootX] || edgeConnected[rootY];
+        unionSet[rootX] = rootY;
+        edgeConnected[rootY] = edgeC;
     }
     
     private int find(int id) {
