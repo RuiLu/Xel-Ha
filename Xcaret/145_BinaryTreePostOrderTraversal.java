@@ -14,24 +14,23 @@ public class Solution {
      *  Reference -> https://discuss.leetcode.com/topic/30632/preorder-inorder-and-postorder-iteratively-summarization
      */
     public List<Integer> postorderTraversal(TreeNode root) {
-        List<Integer> list = new ArrayList<>();
-        if (root == null) return list;
+        List<Integer> res = new ArrayList<>();
+        if (root == null) return res;
         
         Stack<TreeNode> stack = new Stack<>();
-        TreeNode iter = root;
         
-        while (iter != null || !stack.isEmpty()) {
-            if (iter != null) {
-                stack.push(iter);
-                list.add(0, iter.val);
-                iter = iter.right;
+        while (root != null || !stack.isEmpty()) {
+            if (root != null) {
+                stack.push(root);
+                res.add(0, root.val);
+                root = root.right;
             } else {
                 TreeNode node = stack.pop();
-                iter = node.left;
+                root = node.left;
             }
         }
         
-        return list;
+        return res;
     }
     
     /**
