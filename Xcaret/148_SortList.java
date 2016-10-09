@@ -14,47 +14,46 @@ public class Solution {
      */
     public ListNode sortList(ListNode head) {
         if (head == null || head.next == null) return head;
-        return mergeSort(head, null);   
+        return mergeSort(head, null);
     }
     
-    private ListNode mergeSort(ListNode start, ListNode end) {
-        if (start == end) return start;
+    private ListNode mergeSort(ListNode begin, ListNode end) {
+        if (begin == end) return begin;
         
-        ListNode runner = start;
-        ListNode walker = start;
+        ListNode fakeHead = new ListNode(-1);
+        ListNode runner = begin;
+        ListNode walker = begin;
         
-        // first -> find the middle node of the list
+        // 1. find the middle point
         while (runner != end && runner.next != end) {
             runner = runner.next.next;
             walker = walker.next;
         }
         
-        // second -> divide the list into two parts
+        // 2. detach, create two lists
         ListNode prev = walker;
         walker = walker.next;
         prev.next = null;
         
-        // third -> the returned results are sorted already
-        ListNode aList = mergeSort(start, prev);
-        ListNode bList = mergeSort(walker, end);
+        // 3. have two lists sorted and return their heads
+        ListNode aHead = mergeSort(begin, prev);
+        ListNode bHead = mergeSort(walker, end);
         
-        // fourth -> combine these two sorted list into one sorted list
-        ListNode fakeHead = new ListNode(-1);
+        // 4. combine these two sorted lists into one sorted list;
         ListNode iter = fakeHead;
-        
-        while (aList != null && bList != null) {
-            if (aList.val < bList.val) {
-                iter.next = aList;
-                aList = aList.next;
+        while (aHead != null && bHead != null) {
+            if (aHead.val < bHead.val) {
+                iter.next = aHead;
+                aHead = aHead.next;
             } else {
-                iter.next = bList;
-                bList = bList.next;
+                iter.next = bHead;
+                bHead = bHead.next;
             }
             iter = iter.next;
         }
-            
-        if (aList == null) iter.next = bList;
-        if (bList == null) iter.next = aList;
+        
+        if (aHead == null) iter.next = bHead;
+        if (bHead == null) iter.next = aHead;
         
         return fakeHead.next;
     }
