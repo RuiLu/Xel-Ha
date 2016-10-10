@@ -8,20 +8,19 @@ public class Solution {
     public int maximumGap(int[] nums) {
         if (nums == null || nums.length < 2) return 0;
         
-        int maxLen = Integer.MIN_VALUE;
-        int len = nums.length;
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
+        int max = nums[0];
+        int min = nums[0];
+        int maxGap = Integer.MIN_VALUE;
         
         for (int num : nums) {
-            min = Math.min(num, min);
-            max = Math.max(num, max);
+            max = Math.max(max, num);
+            min = Math.min(min, num);
         }
         
-        int gap = (int)Math.ceil((double)(max - min) / (len - 1));
-        int[] minBucket = new int[len - 1];
-        int[] maxBucket = new int[len - 1];
+        int gap = (int)Math.ceil((double)(max - min) / (nums.length - 1));
         
+        int[] minBucket = new int[nums.length - 1];
+        int[] maxBucket = new int[nums.length - 1];
         Arrays.fill(minBucket, Integer.MAX_VALUE);
         Arrays.fill(maxBucket, Integer.MIN_VALUE);
         
@@ -29,27 +28,24 @@ public class Solution {
             if (num == min || num == max) continue;
             
             int idx = (num - min) / gap;
-            
-            minBucket[idx] = Math.min(minBucket[idx], num);
-            maxBucket[idx] = Math.max(maxBucket[idx], num);
+            minBucket[idx] = Math.min(num, minBucket[idx]);
+            maxBucket[idx] = Math.max(num, maxBucket[idx]);
         }
         
-        int prev = min;
+        int previous = min;
         
-        for (int i = 0; i < len - 1; i++) {
+        for (int i = 0; i < nums.length - 1; i++) {
+            // empty bucket
             if (minBucket[i] == Integer.MAX_VALUE && maxBucket[i] == Integer.MIN_VALUE) {
                 continue;
             }
             
-            maxLen = Math.max(maxLen, minBucket[i] - prev);
-            
-            prev = maxBucket[i];
+            maxGap = Math.max(maxGap, minBucket[i] - previous);
+            previous = maxBucket[i];
         }
+        // don't forget compare max with last bucket
+        maxGap = Math.max(maxGap, max - previous);
         
-        /* Don't forget compare the last "curr" to max */
-        maxLen = Math.max(maxLen, max - prev);
-        
-        return maxLen;
-    } 
-    
+        return maxGap;
+    }
 }
