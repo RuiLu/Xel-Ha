@@ -6,16 +6,17 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int maxProduct(int[] nums) {
-        if (nums == null || nums.length < 1) return 0;
+        if (nums == null || nums.length == 0) return 0;
         
-        int max = nums[0];
-        int min = nums[0];
-        int res = nums[0];
+        int max = 1;
+        int min = 1;
+        int res = Integer.MIN_VALUE;
         
-        for (int i = 1; i < nums.length; i++) {
+        for (int i = 0; i < nums.length; i++) {
+            int curr = nums[i];
             int maxTmp = max;
-            max = Math.max(max * nums[i], Math.max(min * nums[i], nums[i]));
-            min = Math.min(maxTmp * nums[i], Math.min(min * nums[i], nums[i]));
+            max = Math.max(curr, Math.max(min * curr, max * curr));
+            min = Math.min(curr, Math.min(min * curr, maxTmp * curr));
             res = Math.max(res, max);
         }
         
