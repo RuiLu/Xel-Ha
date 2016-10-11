@@ -10,24 +10,24 @@ public class Solution {
         
         int row = dungeon.length;
         int col = dungeon[0].length;
-        int[][] hp = new int[row][col];
+        int[][] health = new int[row][col];
         
         for (int i = row - 1; i >= 0; i--) {
             for (int j = col - 1; j >= 0; j--) {
                 if (i == row - 1 && j == col - 1) {
-                    hp[i][j] = Math.max(1 - dungeon[i][j], 1);
+                    health[i][j] = Math.max(1 - dungeon[i][j], 1);
                 } else if (i == row - 1) {
-                    hp[i][j] = Math.max(hp[i][j+1] - dungeon[i][j], 1);
+                    health[i][j] = Math.max(health[i][j+1] - dungeon[i][j], 1);
                 } else if (j == col - 1) {
-                    hp[i][j] = Math.max(hp[i+1][j] - dungeon[i][j], 1);
+                    health[i][j] = Math.max(health[i+1][j] - dungeon[i][j], 1);
                 } else {
-                    int down = Math.max(hp[i+1][j] - dungeon[i][j], 1);
-                    int right = Math.max(hp[i][j+1] - dungeon[i][j], 1);
-                    hp[i][j] = Math.min(down, right);
+                    int right = Math.max(health[i][j+1] - dungeon[i][j], 1);
+                    int down = Math.max(health[i+1][j] - dungeon[i][j], 1);
+                    health[i][j] = Math.min(right, down);
                 }
             }
         }
         
-        return hp[0][0];
+        return health[0][0];
     }
 }
