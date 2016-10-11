@@ -1,11 +1,6 @@
 public class TwoSum {
-    /**
-     *  Using a Map and a List.
-     *  Key of map is number, value of map is the frequency of this number
-     *  Time complexity -> O(n)
-     */
-    private Map<Integer, Integer> map = new HashMap<>();
     private List<Integer> list = new ArrayList<>();
+    private Map<Integer, Integer> map = new HashMap<>();
     
     // Add the number to an internal data structure.
 	public void add(int number) {
@@ -19,12 +14,12 @@ public class TwoSum {
 
     // Find if there exists any pair of numbers which sum is equal to the value.
 	public boolean find(int value) {
-	    for (int num : list) {
-	        int a = num;
-	        int b = value - num;
-	        if ((a == b && map.get(a) > 1) || (a != b && map.containsKey(b))) return true;
-	    }
-	    return false;
+	   for (int num : list) {
+	       int a = num;
+	       int b = value - num;
+	       if ((a == b && map.get(a) > 1) || (a != b && map.containsKey(b))) return true;
+	   }
+	   return false;
 	}
 }
 
