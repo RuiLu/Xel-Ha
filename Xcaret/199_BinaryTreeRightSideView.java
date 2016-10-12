@@ -17,20 +17,18 @@ public class Solution {
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) return list;
-        
         dfs(root, list, 1);
-        
         return list;
     }
     
-    private void dfs(TreeNode node, List<Integer> list, int height) {
+    private void dfs(TreeNode node, List<Integer> list, int level) {
         if (node == null) return;
         
-        if (list.size() < height) {
+        if (list.size() < level) {
             list.add(node.val);
         }
         
-        dfs(node.right, list, height + 1);
-        dfs(node.left, list, height + 1);
+        dfs(node.right, list, level + 1);
+        dfs(node.left, list, level + 1);
     }
 }
