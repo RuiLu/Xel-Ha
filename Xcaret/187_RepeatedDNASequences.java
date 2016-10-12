@@ -10,19 +10,18 @@ public class Solution {
         
         Map<String, Integer> map = new HashMap<>();
         
-        for (int i = 10; i <= s.length(); i++) {
-            String str = s.substring(i - 10, i);
-            
-            if (map.containsKey(str)) {
-                if (map.get(str) == 1) list.add(str);
-                map.put(str, map.get(str) + 1);
+        for (int i = 0; i + 9 < s.length(); i++) {
+            String sub = s.substring(i, i + 10);
+            if (map.containsKey(sub)) {
+                if (map.get(sub) == 1)list.add(sub);
+                map.put(sub, map.get(sub) + 1);
             } else {
-                map.put(str, 1);
+                map.put(sub, 1);
             }
         }
         
         return list;
-    }
+    }  
     
     /**
      *  Or using two sets
@@ -31,18 +30,18 @@ public class Solution {
      *  Space complexity -> O(n)
      */
     public List<String> findRepeatedDnaSequences(String s) {
+        if (s == null || s.length() <= 10) return new ArrayList<>();;
+        
         Set<String> seen = new HashSet<>();
-        Set<String> repeated = new HashSet<>();
+        Set<String> duplicate = new HashSet<>();
         
         for (int i = 0; i + 9 < s.length(); i++) {
-            String str = s.substring(i, i + 10);
-            
-            // if str has already in seen, seen.add(str) will return false 
-            if (!seen.add(str)) {
-                repeated.add(str);
+            String sub = s.substring(i, i + 10);
+            if (!seen.add(sub)) {
+                duplicate.add(sub);
             }
         }
         
-        return new ArrayList<>(repeated);
+        return new ArrayList<>(duplicate);
     }
 }
