@@ -7,15 +7,17 @@ public class Solution {
     public int rob(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         
-        int len = nums.length;
-        int[] dp = new int[len+1];
-        dp[0] = 0;
-        dp[1] = nums[0];
+        int include = 0;
+        int exclude = 0;
         
-        for (int i = 2; i <= len; i++) {
-            dp[i] += Math.max(dp[i-1], dp[i-2] + nums[i-1]);
+        for (int j = 0; j < nums.length; j++) {
+            int i = include;
+            int e = exclude;
+            
+            include = e + nums[j];
+            exclude = Math.max(i, e);
         }
         
-        return dp[len];
+        return Math.max(include, exclude);
     }
 }
