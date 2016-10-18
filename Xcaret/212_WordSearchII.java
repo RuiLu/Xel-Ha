@@ -9,8 +9,8 @@ public class Solution {
         public TrieNode() {
             next = new TrieNode[26];
         }
-    } 
-     
+    }
+    
     private TrieNode buildTrie(String[] words) {
         TrieNode root = new TrieNode();
         
@@ -28,27 +28,25 @@ public class Solution {
         
         return root;
     }
-     
-    private void dfs(char[][] board, TrieNode node, int i, int j, List<String> res) {
-        char ch = board[i][j];
-        if (ch == '#' || node.next[ch - 'a'] == null) return;
+    
+    private void dfs(List<String> res, char[][] board, TrieNode node, int i, int j) {
+        char curr = board[i][j];
+        if (curr == '#' || node.next[curr - 'a'] == null) return;
         
-        node = node.next[ch - 'a'];
+        node = node.next[curr - 'a'];
         
-        // when we found a qualified word, we add it into res, then set it to null to avoid duplicates
         if (node.word != null) {
             res.add(node.word);
             node.word = null;
         }
         
-        // backtracking idea
         board[i][j] = '#';
-        if (i - 1 >= 0) dfs(board, node, i - 1, j, res);
-        if (j - 1 >= 0) dfs(board, node, i, j - 1, res);
-        if (i + 1 < board.length) dfs(board, node, i + 1, j, res);
-        if (j + 1 < board[0].length) dfs(board, node, i, j + 1, res);
-        board[i][j] = ch;
-    } 
+        if (i - 1 >= 0) dfs(res, board, node, i - 1, j);
+        if (i + 1 < board.length) dfs(res, board, node, i + 1, j);
+        if (j - 1 >= 0) dfs(res, board, node, i, j - 1);
+        if (j + 1 < board[0].length) dfs(res, board, node, i, j + 1);
+        board[i][j] = curr;
+    }
     
     public List<String> findWords(char[][] board, String[] words) {
         List<String> res = new ArrayList<>();
@@ -56,13 +54,13 @@ public class Solution {
             return res;
         }
         
-        TrieNode root = buildTrie(words);
         int row = board.length;
         int col = board[0].length;
+        TrieNode root = buildTrie(words);
         
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                dfs(board, root, i, j, res);
+                dfs(res, board, root, i, j);
             }
         }
         
