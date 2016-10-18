@@ -18,7 +18,7 @@ public class Solution {
         
         for (int i = 0; i < numCourses; i++) {
             if (visited[i] == 0) {
-                if (hasCircle(lists, tmp, visited, i)) return new int[0];
+                if (hasCircle(lists, visited, tmp, i)) return new int[0];
             }
         }
         
@@ -28,14 +28,14 @@ public class Solution {
         return res;
     }
     
-    private boolean hasCircle(List<List<Integer>> lists, LinkedList<Integer> tmp, int[] visited, int i) {
+    private boolean hasCircle(List<List<Integer>> lists, int[] visited, LinkedList<Integer> tmp, int i) {
         if (visited[i] == 1) return true;
         
         visited[i] = 1;
         for (int next : lists.get(i)) {
             if (visited[next] == 1) return true;
             if (visited[next] == 0) {
-                if (hasCircle(lists, tmp, visited, next)) return true;
+                if (hasCircle(lists, visited, tmp, next)) return true;
             }
         }
         visited[i] = 2;
@@ -52,7 +52,7 @@ public class Solution {
             int[] res = new int[numCourses];
             for (int i = 0; i < numCourses; i++) res[i] = i;
             return res;
-        }    
+        }
         
         Map<Integer, Set<Integer>> map = new HashMap<>();
         Map<Integer, Integer> incomingDegrees = new HashMap<>();
@@ -64,17 +64,15 @@ public class Solution {
             if (map.containsKey(pre[1])) set = map.get(pre[1]);
             if (!set.contains(pre[0])) {
                 set.add(pre[0]);
-                incomingDegrees.put(pre[0], incomingDegrees.get(pre[0]) + 1);
                 map.put(pre[1], set);
+                incomingDegrees.put(pre[0], incomingDegrees.get(pre[0]) + 1);
             }
         }
         
         Queue<Integer> queue = new LinkedList<>();
         
         for (int key : incomingDegrees.keySet()) {
-            if (incomingDegrees.get(key) == 0) {
-                queue.offer(key);
-            }
+            if (incomingDegrees.get(key) == 0) queue.offer(key);
         }
         
         List<Integer> tmp = new ArrayList<>();
