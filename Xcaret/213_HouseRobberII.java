@@ -6,10 +6,10 @@ public class Solution {
     public int rob(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
-        return Math.max(helper(nums, 0, nums.length - 2), helper(nums, 1, nums.length - 1));
+        return Math.max(robHelper(nums, 0, nums.length - 2), robHelper(nums, 1, nums.length - 1));
     }
     
-    private int helper(int[] nums, int begin, int end) {
+    private int robHelper(int[] nums, int begin, int end) {
         int include = 0;
         int exclude = 0;
         
@@ -17,7 +17,7 @@ public class Solution {
             int i = include;
             int e = exclude;
             include = e + nums[j];
-            exclude = Math.max(e, i);
+            exclude = Math.max(i, e);
         }
         
         return Math.max(include, exclude);
