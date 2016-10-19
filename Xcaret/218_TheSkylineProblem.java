@@ -22,7 +22,8 @@ public class Solution {
         Collections.sort(heights, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
         
         TreeMap<Integer, Integer> tmap = new TreeMap<>();
-        tmap.put(0, 1);
+        // we need to put a default value in it
+        tmap.put(0, -1);
         int previous = 0;
         
         for (int[] height : heights) {
