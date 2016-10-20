@@ -18,18 +18,18 @@ public class Solution {
             else return 0;
         }
         
-        TreeNode midNode = node.left;
+        TreeNode mid = node.left;
         int currHeight = 1;
         
         while (currHeight < height) {
             currHeight++;
-            midNode = midNode.right;
+            mid = mid.right;
         }
         
-        if (midNode == null) return countLastLevel(node.left, height - 1);
+        if (mid == null) return countLastLevel(node.left, height - 1);
         else return (1 << (height - 1)) + countLastLevel(node.right, height - 1);
-    } 
-     
+    }
+ 
     public int countNodes(TreeNode root) {
         if (root == null) return 0;
         if (root.left == null) return 1;
