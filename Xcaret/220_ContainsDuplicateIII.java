@@ -1,6 +1,7 @@
 public class Solution {
     /**
      *  Idea -> Binary Search Tree, using a TreeSet
+     *       -> TreeSet can act as a Binary Search Tree in this case
      *  Time complexity -> O(nlogk)
      */
     public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
@@ -17,7 +18,7 @@ public class Solution {
             }
             
             tset.add(nums[i]);
-            if (i >= k) tset.remove(nums[i-k]);    
+            if (i >= k) tset.remove(nums[i-k]);
         }
         
         return false;
