@@ -6,14 +6,21 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int majorityElement(int[] nums) {
+       int num = 0;
        int count = 0;
-       int res = 0;
-       for (int num : nums) {
-           if (count == 0) res = num;
-           if (res == num) count++;
-           else count--;
+       
+       for (int i = 0; i < nums.length; i++) {
+           if (nums[i] == num) {
+               count++;
+           } else if (count == 0) {
+               num = nums[i];
+               count++;
+           } else {
+               count--;
+           }
        }
-       return res;
+       
+       return num;
     }
     
     /**
