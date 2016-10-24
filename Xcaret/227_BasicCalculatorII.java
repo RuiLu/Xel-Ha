@@ -9,26 +9,29 @@ public class Solution {
         if (s == null || s.length() == 0) return 0;
         
         Stack<Integer> stack = new Stack<Integer>();
-        int len = s.length();
-        int num = 0;
         char sign = '+';
+        int num = 0;
         
-        for (int i = 0; i < len; i++) {
-            if (Character.isDigit(s.charAt(i))) {
-                num = 10 * num + (s.charAt(i) - '0');
+        for (int i = 0; i < s.length(); i++) {
+            char curr = s.charAt(i);
+            if (Character.isDigit(curr)) {
+                num = num * 10 + (curr - '0');
             }
-            if ((!Character.isDigit(s.charAt(i)) && s.charAt(i) != ' ') || i == len - 1) {
+            if ((!Character.isDigit(curr) && curr != ' ') || (i == s.length() - 1)) {
                 if (sign == '+') {
                     stack.push(num);
-                } else if (sign == '-') {
-                    stack.push(-num); 
-                } else if (sign == '*') {
+                }
+                if (sign == '-') {
+                    stack.push(-num);
+                }
+                if (sign == '*') {
                     stack.push(stack.pop() * num);
-                } else if (sign == '/') {
+                }
+                if (sign == '/') {
                     stack.push(stack.pop() / num);
                 }
                 
-                sign = s.charAt(i);
+                sign = curr;
                 num = 0;
             }
         }
