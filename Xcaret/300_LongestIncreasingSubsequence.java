@@ -1,6 +1,8 @@
 public class Solution {
     /**
-     *  Idea -> Binary Search
+     *  Idea -> Binary Search, sometimes you need to sacrifice space to speed up
+     *  Time complexity -> O(nlogn)
+     *  Space complexity -> O(n)
      */
     private int findPosInTmp(int[] tmp, int lo, int hi, int target) {
         while (lo <= hi) {
@@ -15,14 +17,16 @@ public class Solution {
     public int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         
-        int[] tmp = new int[nums.length];
-        tmp[0] = nums[0];
-        int max = 1;
+        int len = nums.length;
+        int[] tmp = new int[len];
+        int max = 0;
+        
+        tmp[max++] = nums[0]; 
         
         for (int i = 1; i < nums.length; i++) {
+            // we should use tmp[max-1] to compare, because it the last element inserted in tmp
             if (nums[i] > tmp[max-1]) {
-                tmp[max] = nums[i];
-                max++;
+                tmp[max++] = nums[i];
             } else {
                 int pos = findPosInTmp(tmp, 0, max - 1, nums[i]);
                 tmp[pos] = nums[i];
@@ -40,21 +44,21 @@ public class Solution {
     public int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         
+        int len = nums.length;
+        int[] dp = new int[len];
         int res = 1;
-        int[] dp = new int[nums.length];
         
         for (int i = 0; i < nums.length; i++) {
             dp[i] = 1;
             
             for (int j = 0; j < i; j++) {
-                if (nums[i] > nums[j]) {
+                if (nums[j] < nums[i]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
             
             res = Math.max(res, dp[i]);
         }
-        
         
         return res;
     }
