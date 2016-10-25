@@ -13,7 +13,6 @@ public class TicTacToe {
     private int diagonal = 0;
     private int antidiagonal = 0;
     private int size = 0;
-    
      
     /** Initialize your data structure here. */
     public TicTacToe(int n) {
