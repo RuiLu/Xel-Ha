@@ -18,16 +18,14 @@ public class Solution {
         int res = 0;
         
         while (root != null) {
-            if ((double)root.val == target) return root.val;
-            
-            double diff = Math.abs((double)root.val - target);
-            if (diff <= minDiff) {
-                minDiff = diff;
+            if (Math.abs(target - (double)root.val) <= minDiff) {
+                minDiff = Math.abs(target - (double)root.val);
+                if (minDiff == 0.0) return root.val;
                 res = root.val;
             }
             
-            if ((double)root.val < target) root = root.right;
-            else root = root.left;
+            if ((double)root.val > target) root = root.left;
+            else root = root.right;   
         }
         
         return res;
