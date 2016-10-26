@@ -10,7 +10,7 @@ public class Solution {
     /**
      *  Second try -> avoid to use extra space
      *  Idea -> Maintaining three variables 
-     *       -> 1. head - start point for next level traversal
+     *       -> 1. nextHead - start point for next level traversal
      *       -> 2. prev - the previous node of iter
      *       -> 3. iter - used for traversing next pointer
      *  
@@ -21,38 +21,26 @@ public class Solution {
     public void connect(TreeLinkNode root) {
         if (root == null) return;
         
-        TreeLinkNode head = null;
-        TreeLinkNode prev = null;
-        TreeLinkNode iter = root;
-        
-        // vertical traversal
-        while (iter != null) {
-            // horizontal traversal
+        while (root != null) {
+            TreeLinkNode iter = root;
+            TreeLinkNode nextHead = null;
+            TreeLinkNode prev = null;
+            
             while (iter != null) {
                 if (iter.left != null) {
-                    if (prev != null) {
-                        prev.next = iter.left;
-                    } else {
-                        head = iter.left;
-                    }
+                    if (prev != null) prev.next = iter.left;
+                    else nextHead = iter.left;
                     prev = iter.left;
                 }
-                
                 if (iter.right != null) {
-                    if (prev != null) {
-                        prev.next = iter.right;
-                    } else {
-                        head = iter.right;
-                    }
+                    if (prev != null) prev.next = iter.right;
+                    else nextHead = iter.right;
                     prev = iter.right;
                 }
-                
                 iter = iter.next;
             }
             
-            iter = head;
-            head = null;
-            prev = null;
+            root = nextHead;
         }
     } 
      
@@ -61,33 +49,35 @@ public class Solution {
      *  Time complexity -> O(n)
      *  Space complexity -> O(n)
      */
-    // public void connect(TreeLinkNode root) {
-    //     if (root == null) return;
+    public void connect(TreeLinkNode root) {
+        if (root == null) return;
         
-    //     Queue<TreeLinkNode> queue = new LinkedList<>();
-    //     queue.offer(root);
-    //     int currNum = 1;
-    //     int nextNum = 0;
+        Queue<TreeLinkNode> queue = new LinkedList<TreeLinkNode>();
+        queue.offer(root);
+        int currLevel = 1;
+        int nextLevel = 0;
         
-    //     while (!queue.isEmpty()) {
-    //         TreeLinkNode node = queue.poll();
-    //         currNum--;
+        while (!queue.isEmpty()) {
+            TreeLinkNode node = queue.poll();
+            currLevel--;
             
-    //         if (node.left != null) {
-    //             queue.offer(node.left);
-    //             nextNum++;
-    //         }
-    //         if (node.right != null) {
-    //             queue.offer(node.right);
-    //             nextNum++;
-    //         }
+            if (node.left != null) {
+                queue.offer(node.left);
+                nextLevel++;
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+                nextLevel++;
+            }
             
-    //         if (currNum != 0) {
-    //             node.next = queue.peek();
-    //         } else {
-    //             currNum = nextNum;
-    //             nextNum = 0;
-    //         }
-    //     }
-    // } 
+            if (currLevel == 0) {
+                currLevel = nextLevel;
+                nextLevel = 0;
+            } else {
+                if (!queue.isEmpty()) {
+                    node.next = queue.peek();
+                }
+            }
+        }
+    } 
 }
