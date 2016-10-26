@@ -1,22 +1,22 @@
 public class Solution {
     public String countAndSay(int n) {
-        if (n < 1) return "";
+        if (n <= 0) return "";
+        
         String res = "1";
         
         while (--n > 0) {
-            StringBuilder sb = new StringBuilder();
-            char prev = res.charAt(0);
             int count = 1;
+            char prev = res.charAt(0);
+            StringBuilder sb = new StringBuilder();
             
             for (int i = 1; i < res.length(); i++) {
                 char curr = res.charAt(i);
                 
-                if (prev != curr) {
+                if (curr != prev) {
                     sb.append(count);
                     sb.append(prev);
-                    
-                    prev = res.charAt(i);
                     count = 0;
+                    prev = curr;
                 }
                 
                 count++;
