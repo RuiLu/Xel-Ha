@@ -4,16 +4,17 @@ public class Solution {
      *  Time complexity -> O(n!)
      */
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (nums == null || nums.length == 0) return res;
+        List<List<Integer>> lists = new ArrayList<>();
+        if (nums == null || nums.length == 0) return lists;
+        List<Integer> tmp = new ArrayList<>();
         boolean[] visited = new boolean[nums.length];
-        helper(res, nums, visited, new ArrayList<>());
-        return res;
+        helper(nums, lists, tmp, visited);
+        return lists;
     }
     
-    private void helper(List<List<Integer>> res, int[] nums, boolean[] visited, List<Integer> tmp) {
+    private void helper(int[] nums, List<List<Integer>> lists, List<Integer> tmp, boolean[] visited) {
         if (tmp.size() == nums.length) {
-            res.add(new ArrayList<>(tmp));
+            lists.add(new ArrayList<>(tmp));
             return;
         }
         
@@ -21,7 +22,7 @@ public class Solution {
             if (!visited[i]) {
                 visited[i] = true;
                 tmp.add(nums[i]);
-                helper(res, nums, visited, tmp);
+                helper(nums, lists, tmp, visited);
                 tmp.remove(tmp.size() - 1);
                 visited[i] = false;
             }
