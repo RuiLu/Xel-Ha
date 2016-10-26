@@ -21,9 +21,9 @@ public class Solution {
                 } else if (j == col - 1) {
                     health[i][j] = Math.max(health[i+1][j] - dungeon[i][j], 1);
                 } else {
-                    int right = Math.max(health[i][j+1] - dungeon[i][j], 1);
                     int down = Math.max(health[i+1][j] - dungeon[i][j], 1);
-                    health[i][j] = Math.min(right, down);
+                    int right = Math.max(health[i][j+1] - dungeon[i][j], 1);
+                    health[i][j] = Math.min(down, right);
                 }
             }
         }
