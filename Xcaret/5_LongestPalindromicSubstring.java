@@ -4,35 +4,35 @@ public class Solution {
      *  Time complexity -> O(n^2) in worst case, where n is the length of input string
      */
     public String longestPalindrome(String s) {
-        if (s == null || s.length() < 2) return s;
+        if (s == null || s.length() <= 1) return s;
         
-        int maxLen = Integer.MIN_VALUE;
         int lo = 0;
         int hi = 0;
+        int maxLen = Integer.MIN_VALUE;
         char[] sca = s.toCharArray();
         int len = sca.length;
         
         for (int i = 0; i < len; i++) {
-            /* for odd length */
-            for (int j = 0; i - j >= 0 && i + j < len && sca[i - j] == sca[i + j]; j++) {
+            // for odd length
+            for (int j = 0; (i - j >= 0) && (i + j < len) && sca[i-j] == sca[i+j]; j++) {
                 if (maxLen < 2 * j + 1) {
-                    maxLen = 2 * j + 1;
                     lo = i - j;
-                    hi = i + j + 1;
+                    hi = i + j;
+                    maxLen = 2 * j + 1;
                 }
             }
             
-            /* for even length */
-            for (int j = 1; i - j + 1 >= 0 && i + j < len && sca[i - j + 1] == sca[i + j]; j++) {
+            // for even length
+            for (int j = 1; (i - j + 1 >= 0) && (i + j < len) && sca[i-j+1] == sca[i+j]; j++) {
                 if (maxLen < 2 * j) {
-                    maxLen = 2 * j;
                     lo = i - j + 1;
-                    hi = i + j + 1;
+                    hi = i + j;
+                    maxLen = 2 * j;
                 }
             }
         }
         
-        return s.substring(lo, hi);
+        return s.substring(lo, hi + 1);
     }
     
     /**
