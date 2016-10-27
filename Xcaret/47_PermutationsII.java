@@ -5,32 +5,28 @@ public class Solution {
      *  Time complexity -> O(n!)
      */
     public List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (nums == null || nums.length == 0) return res;
-        
+        List<List<Integer>> lists = new ArrayList<>();
+        if (nums == null || nums.length == 0) return lists;
         Arrays.sort(nums);
         boolean[] visited = new boolean[nums.length];
         List<Integer> tmp = new ArrayList<>();
-        
-        helper(res, nums, visited, tmp);
-        
-        return res;
+        helper(nums, lists, tmp, visited);
+        return lists;
     }
     
-    private void helper(List<List<Integer>> res, int[] nums, boolean[] visited, List<Integer> tmp) {
+    private void helper(int[] nums, List<List<Integer>> lists, List<Integer> tmp, boolean[] visited) {
         if (tmp.size() == nums.length) {
-            res.add(new ArrayList<>(tmp));
+            lists.add(new ArrayList<>(tmp));
             return;
         }
         
         for (int i = 0; i < nums.length; i++) {
-            /* if there exists duplicates and more than one of them are not used before, we SKIP */
-            if (i > 0 && !visited[i-1] && nums[i-1] == nums[i]) continue;
+            if (i > 0 && nums[i] == nums[i-1] && !visited[i-1]) continue;
             
             if (!visited[i]) {
                 visited[i] = true;
                 tmp.add(nums[i]);
-                helper(res, nums, visited, tmp);
+                helper(nums, lists, tmp, visited);
                 tmp.remove(tmp.size() - 1);
                 visited[i] = false;
             }
