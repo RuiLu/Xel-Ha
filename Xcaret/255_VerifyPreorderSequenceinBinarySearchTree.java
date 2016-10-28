@@ -4,23 +4,21 @@ public class Solution {
      *  Time complexity -> O(n) in worst case
      *  Space complexity -> O(1)
      */
-    private boolean helper(int[] preorder, int start, int end) {
-        if (start >= end) return true;
+    private boolean verify(int[] preorder, int begin, int end) {
+        if (begin >= end) return true;
         
         int firstBigger = -1;
-        int rootVal = preorder[start];
-        
-        for (int i = start + 1; i <= end; i++) {
-            if (firstBigger == -1 && rootVal < preorder[i]) firstBigger = i;
-            if (firstBigger != -1 && rootVal > preorder[i]) return false;
+        for (int i = begin; i <= end; i++) {
+            if (firstBigger == -1 && preorder[i] > preorder[begin]) firstBigger = i;
+            if (firstBigger != -1 && preorder[i] < preorder[begin]) return false;
         }
         
-        if (firstBigger == -1) return helper(preorder, start + 1, end);
-        else return helper(preorder, start + 1, firstBigger - 1) && helper(preorder, firstBigger, end);
+        if (firstBigger == -1) return verify(preorder, begin + 1, end);
+        else return verify(preorder, begin + 1, firstBigger - 1) && verify(preorder, firstBigger, end);
     }
     
     public boolean verifyPreorder(int[] preorder) {
         if (preorder == null || preorder.length <= 1) return true;
-        return helper(preorder, 0, preorder.length - 1);
+        return verify(preorder, 0, preorder.length - 1);
     }
 }
