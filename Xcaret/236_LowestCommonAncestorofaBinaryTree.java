@@ -17,7 +17,8 @@ public class Solution {
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         Map<TreeNode, TreeNode> map = new HashMap<>();
-        Queue<TreeNode> queue = new LinkedList<>();
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        
         map.put(root, null);
         queue.offer(root);
         
