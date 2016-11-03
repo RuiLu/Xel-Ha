@@ -7,19 +7,17 @@ public class Solution {
     public int minMutation(String start, String end, String[] bank) {
         if (bank == null || bank.length == 0) return -1;
         
+        int len = 0;
+        char[] dna = new char[]{'A', 'C', 'G', 'T'};
         Set<String> beginSet = new HashSet<>();
         Set<String> endSet = new HashSet<>();
-        Set<String> bankSet = new HashSet<>();
         Set<String> visited = new HashSet<>();
-        
-        char[] dna = new char[]{'A', 'C', 'G', 'T'};
+        Set<String> bankSet = new HashSet<>();
         
         for (String s : bank) bankSet.add(s);
         if (!bankSet.contains(end)) return -1;
-        
         beginSet.add(start);
         endSet.add(end);
-        int len = 0;
         
         while (!beginSet.isEmpty() && !endSet.isEmpty()) {
             if (beginSet.size() > endSet.size()) {
@@ -40,10 +38,11 @@ public class Solution {
                         if (endSet.contains(next)) return len + 1;
                         
                         if (bankSet.contains(next) && !visited.contains(next)) {
-                            tmp.add(next);
                             visited.add(next);
+                            tmp.add(next);
                         }
                         
+                        /* Backtracking */
                         sca[i] = old;
                     }
                 }
@@ -54,5 +53,5 @@ public class Solution {
         }
         
         return -1;
-    }
+    }   
 }
