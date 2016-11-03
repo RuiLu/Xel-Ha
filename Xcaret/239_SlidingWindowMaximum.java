@@ -7,25 +7,25 @@ public class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
         if (nums == null || nums.length == 0) return nums;
         
+        Deque<Integer> queue = new ArrayDeque<>();
         int[] res = new int[nums.length - k + 1];
-        Deque<Integer> deque = new ArrayDeque<>();
         int index = 0;
         
         for (int i = 0; i < nums.length; i++) {
-            // when the index is out of range k, poll it out from queue
-            while (!deque.isEmpty() && deque.peek() < i - k + 1) {
-                deque.poll();
+            // when the window is sliding away
+            while (!queue.isEmpty() && i - k + 1 > queue.peek()) {
+                queue.poll();
             }
             
-            // keep the index of largest element in the range
-            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
-                deque.pollLast();
+            // when previous elements are smaller than the current element in the window
+            while (!queue.isEmpty() && nums[queue.peek()] < nums[i]) {
+                queue.poll();
             }
             
-            deque.offer(i);
+            queue.offer(i);
             
-            if (i >= k - 1) {
-                res[index++] = nums[deque.peek()];
+            if (i + 1 >= k) {
+                res[index++] = nums[queue.peek()];
             }
         }
         
@@ -36,25 +36,25 @@ public class Solution {
      *  Idea -> Using a PriorityQueue to maintain the descending window
      *  Time complexity -> O(n^2)
      */ 
-    public int[] maxSlidingWindow(int[] nums, int k) {
-        if (nums == null || nums.length == 0) return nums;
+    // public int[] maxSlidingWindow(int[] nums, int k) {
+    //     if (nums == null || nums.length == 0) return nums;
         
-        int[] res = new int[nums.length - k + 1];
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> (b - a));
+    //     int[] res = new int[nums.length - k + 1];
+    //     PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> (b - a));
         
-        for (int i = 0; i < k; i++) {
-            pq.offer(nums[i]);
-        }
+    //     for (int i = 0; i < k; i++) {
+    //         pq.offer(nums[i]);
+    //     }
         
-        int count = 0;
-        res[count++] = pq.peek();
+    //     int count = 0;
+    //     res[count++] = pq.peek();
         
-        for (int i = k; i < nums.length; i++) {
-            pq.remove(nums[i-k]);
-            pq.offer(nums[i]);
-            res[count++] = pq.peek();
-        }
+    //     for (int i = k; i < nums.length; i++) {
+    //         pq.remove(nums[i-k]);
+    //         pq.offer(nums[i]);
+    //         res[count++] = pq.peek();
+    //     }
         
-        return res;
-    }
+    //     return res;
+    // }
 }
