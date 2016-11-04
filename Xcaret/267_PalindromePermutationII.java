@@ -2,6 +2,7 @@ public class Solution {
     /**
      *  Idea -> First determine if the given string is palindrome, if not, return empty.
      *          Otherwise, if the lengthe is odd, find the mid, and construct palindrome from both sides of mid.
+     *  Time complexity -> O((n/2)^(n/2)) in worst case, where n is the length of String
      */
     private static void getAllPermutations(List<String> res, Map<Character, Integer> map, String mid, int len) {
         if (mid.length() == len) {
