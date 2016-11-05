@@ -15,16 +15,18 @@ public class Solution {
         
         /* 1. Add every character into degree */
         for (String word : words) {
-            for (char ch : word.toCharArray()) degree.put(ch, 0);
+            for (char ch : word.toCharArray()) {
+                degree.put(ch, 0);
+            }
         }
         
-        /* 2. Add degree to character, according to the first different character between two adjacent words */
+        /* 2. Add degree to character, according to the first different character between adjacent word  */
         for (int i = 0; i < words.length - 1; i++) {
             String curr = words[i];
             String next = words[i+1];
-            int len = Math.min(curr.length(), next.length());
+            int minLen = Math.min(curr.length(), next.length());
             
-            for (int j = 0; j < len; j++) {
+            for (int j = 0; j < minLen; j++) {
                 char c1 = curr.charAt(j);
                 char c2 = next.charAt(j);
                 
@@ -39,18 +41,18 @@ public class Solution {
                     break;
                 } else {
                     /* Avoid the situation that ["wrtkj", "wrt"], which is not allowed  */
-                    if (j + 1 <= curr.length() - 1 && j + 1 > next.length() - 1) return "";
+                    if ((j + 1 < curr.length()) && (j + 1 >= next.length())) return res;
                 }
             }
         }
         
-        /* 3. Add character with 0 degree to queue */
+        /* 3. Add character with 0 degree into queue */
         Queue<Character> queue = new LinkedList<>();
-        for (char ch : degree.keySet()) {
-            if (degree.get(ch) == 0) queue.offer(ch);
+        for (char key : degree.keySet()) {
+            if (degree.get(key) == 0) queue.offer(key);
         }
         
-        /* 4. Use bfs to do topological sort */
+        /* 4. Use bfs */
         while (!queue.isEmpty()) {
             char curr = queue.poll();
             res += curr;
@@ -58,12 +60,14 @@ public class Solution {
             if (map.containsKey(curr)) {
                 for (char next : map.get(curr)) {
                     degree.put(next, degree.get(next) - 1);
-                    if (degree.get(next) == 0) queue.offer(next);
+                    if (degree.get(next) == 0) {
+                        queue.offer(next);
+                    }
                 }
             }
         }
         
-        /* 5. Make sure all characters are used */
+        /* 5. Check if all nodes are connected */
         if (res.length() != degree.size()) return "";
         
         return res;
