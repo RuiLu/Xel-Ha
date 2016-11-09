@@ -2,44 +2,39 @@ public class NumArray {
     /**
      *  Idea -> Binary Index Tree
      */
-    private int[] BIT = null; 
-     
-    private void update(int index, int len, int val) {
-        index += 1;
-        
-        while (index <= len) {
-            BIT[index] += val;
-            index += (index) & (-index);
-        }
-    } 
-     
-    private int getSum(int index) {
-        int sum = 0;
-        index += 1;
-        
-        while (index > 0) {
-            sum += BIT[index];
-            index -= (index) & (-index);
-        }
-        
-        return sum;
-    }
+    private int[] bit = null;
      
     public NumArray(int[] nums) {
         int len = nums.length;
-        BIT = new int[len+1];
-        for (int i = 0; i < nums.length; i++) {
-            update(i, len, nums[i]);
+        bit = new int[len+1];
+        for (int i = 0; i < len; i++) {
+            update(i, nums[i]);
         }
     }
 
     public int sumRange(int i, int j) {
         if (i > j) return 0;
-        
         int firstSum = getSum(i - 1);
         int secondSum = getSum(j);
-        
         return secondSum - firstSum;
+    }
+    
+    private void update(int index, int val) {
+        index += 1;
+        while (index < bit.length) {
+            bit[index] += val;
+            index += index & (-index);
+        }
+    }
+    
+    private int getSum(int index) {
+        index += 1;
+        int sum = 0;
+        while (index > 0) {
+            sum += bit[index];
+            index -= index & (-index);
+        }
+        return sum;
     }
 }
 
