@@ -7,34 +7,38 @@ public class Solution {
      *  Time complexity -> O(nlogn)
      *  Space complexity -> O(n)
      */
-    private static int findPos(int lo, int hi, int[] tmp, int num) {
-        while (lo <= hi) {
-            int mid = (lo + hi) / 2;
-            if (tmp[mid] == num) return mid;
-            else if (tmp[mid] > num) hi = mid - 1;
-            else lo = mid + 1;
-        }
-        return lo;
-    }
-
     public static int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         
         int len = nums.length;
         int[] tmp = new int[len];
         int max = 0;
+        
         tmp[max] = nums[0];
         
         for (int i = 1; i < len; i++) {
             if (nums[i] > tmp[max]) {
                 tmp[++max] = nums[i];
             } else {
-                int pos = findPos(0, max, tmp, nums[i]);
+                int pos = findPos(tmp, max, nums[i]);
                 tmp[pos] = nums[i];
             }
         }
         
         return max + 1;
+    }
+    
+    private static int findPos(int[] tmp, int hi, int val) {
+        int lo = 0;
+        
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            if (tmp[mid] == val) return mid;
+            else if (tmp[mid] > val) hi = mid - 1;
+            else lo = mid + 1;
+        }
+        
+        return lo;
     }
     
     /**
@@ -48,19 +52,18 @@ public class Solution {
     public int lengthOfLIS(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         
-        int maxLen = Integer.MIN_VALUE;
         int len = nums.length;
         int[] dp = new int[len];
+        int maxLen = 1;
         
-        for (int i = 0; i < nums.length; i++) {
-            dp[i] = 1;
-            
+        Arrays.fill(dp, 1);
+        
+        for (int i = 1; i < len; i++) {
             for (int j = 0; j < i; j++) {
                 if (nums[j] < nums[i]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
-            
             maxLen = Math.max(maxLen, dp[i]);
         }
         
