@@ -4,40 +4,45 @@ public class Solution {
      *  Reference -> Reference -> https://discuss.leetcode.com/topic/29006/c-java-python-binary-search-solution-with-explanation
      *  Time complexity -> O(mlogn + nlogm)
      */
-    private static int searchCols(int i, int j, int top, int bottom, boolean isLeft, char[][] image) {
-        while (i != j) {
-            int mid = (i + j) / 2;
-            int k = top;
-            while (k < bottom && image[k][mid] == '0') k++;
-            if ((k < bottom) == isLeft) j = mid;
-            else i = mid + 1;
-        }
-        return i;
-    }
-     
-    private static int searchRows(int i, int j, int left, int right, boolean isUp, char[][] image) {
-        while (i != j) {
-            int mid = (i + j) / 2;
-            int k = left;
-            while (k < right && image[mid][k] == '0') k++;
-            if ((k < right) == isUp) j = mid;
-            else i = mid + 1;
-        }
-        return i;
-    } 
-     
+
     public int minArea(char[][] image, int x, int y) {
         if (image == null || image.length == 0 || image[0].length == 0) return 0;
         
         int row = image.length;
         int col = image[0].length;
         
-        int left = searchCols(0, y, 0, row, true, image);
-        int right = searchCols(y + 1, col, 0, row, false, image);
-        int up = searchRows(0, x, left, right, true, image);
-        int down = searchRows(x + 1, row, left, right, false, image);
+        int left = searchCols(0, y, 0, row, image, true);
+        int right = searchCols(y + 1, col, 0, row, image, false);
+        int up = searchRows(0, x, left, right, image, true);
+        int down = searchRows(x + 1, row, left, right, image, false);
         
         return (right - left) * (down - up);
+    }
+    
+    private int searchCols(int i, int j, int top, int bottom, char[][] image, boolean isLeft) {
+        while (i != j) {
+            int mid = (i + j) / 2;
+            int k = top;
+            
+            while (k < bottom && image[k][mid] != '1') k++;
+            
+            if ((k < bottom) == isLeft) j = mid;
+            else i = mid + 1;
+        }
+        return i;
+    }
+    
+    private int searchRows(int i, int j, int left, int right, char[][] image, boolean isUp) {
+        while (i != j) {
+            int mid = (i + j) / 2;
+            int k = left;
+            
+            while (k < right && image[mid][k] != '1') k++;
+            
+            if ((k < right) == isUp) j = mid;
+            else i = mid + 1;
+        }
+        return i;
     }
     
     /**
