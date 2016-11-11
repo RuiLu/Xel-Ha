@@ -8,31 +8,32 @@ public class Solution {
     public int maxCoins(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         
-        int[] cnums = new int[nums.length+2];
+        int len = nums.length;
+        int[] cnums = new int[len+2];
+        int n = 0;
         
-        int n = 1;
+        cnums[n++] = 1;
         for (int num : nums) cnums[n++] = num;
-        cnums[0] = 1;
         cnums[n] = 1;
         
         int[][] map = new int[n+1][n+1];
         
-        return burstBalloons(cnums, map, 0, n);
+        return findMaxCoins(cnums, 0, n, map);
     }
     
-    private int burstBalloons(int[] cnums, int[][] map, int left, int right) {
+    private int findMaxCoins(int[] cnums, int left, int right, int[][] map) {
         if (left + 1 == right) return 0;
         if (map[left][right] > 0) return map[left][right];
         
-        int res = 0;
+        int max = 0;
         
         for (int i = left + 1; i < right; i++) {
-            res = Math.max(res, cnums[left] * cnums[i] * cnums[right] +
-                                burstBalloons(cnums, map, left, i) +
-                                burstBalloons(cnums, map, i, right));
+            max = Math.max(max, findMaxCoins(cnums, left, i, map) + 
+                                cnums[left] * cnums[i] * cnums[right] +
+                                findMaxCoins(cnums, i, right, map));    
         }
         
-        map[left][right] = res;
-        return res;
+        map[left][right] = max;
+        return max;
     }
 }
