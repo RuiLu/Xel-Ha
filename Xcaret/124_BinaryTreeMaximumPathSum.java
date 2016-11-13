@@ -15,23 +15,22 @@ public class Solution {
      *  Time complexity -> O(n), since it accesses each node once
      *  Space complexity -> O(1)
      */
-    private int maxPathSum;
+    private int maxSum = Integer.MIN_VALUE;
     
     public int maxPathSum(TreeNode root) {
         if (root == null) return 0;
-        maxPathSum = Integer.MIN_VALUE;
         getMaxPathSum(root);
-        return maxPathSum;
+        return maxSum;
     }
-    
+        
     private int getMaxPathSum(TreeNode node) {
         if (node == null) return 0;
         
-        // if the path sum from left or right subtree is negative, we can simply ignore it and set sum to zero
         int left = Math.max(0, getMaxPathSum(node.left));
         int right = Math.max(0, getMaxPathSum(node.right));
         
-        maxPathSum = Math.max(maxPathSum, (left + right + node.val));
+        maxSum = Math.max(maxSum, left + node.val + right);
+        
         return Math.max(left, right) + node.val;
-    }
+    }     
 }
