@@ -1,6 +1,6 @@
 public class Solution {
     /**
-     *  Dynamic Programming
+     *  Idea -> Dynamic Programming: dp[i] = dp[j] && wordDict.contains(s.substring(i, j)), where j is from [0,i)
      *  Time complexity -> O(n^2)
      *  Space complexity -> O(n)
      */
@@ -12,8 +12,8 @@ public class Solution {
         dp[0] = true;
         
         for (int i = 1; i <= len; i++) {
-            for (int left = 0; left < i; left++) {
-                if (dp[left] && wordDict.contains(s.substring(left, i))) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDict.contains(s.substring(j, i))) {
                     dp[i] = true;
                     break;
                 }
@@ -21,36 +21,29 @@ public class Solution {
         }
         
         return dp[len];
-    // }
+    }
     
     /**
-     *  Backtracking
+     *  Idea -> DFS + memorization
      */
     public boolean wordBreak(String s, Set<String> wordDict) {
         if (s == null || s.length() == 0 || wordDict.size() == 0) return false;
-        Set<Integer> failed = new HashSet<>();
-        return helper(s, wordDict, 0, failed);
+        Set<String> failed = new HashSet<>();
+        return helper(s, wordDict, failed);
     }
     
-    private boolean helper(String s, Set<String> wordDict, int start, Set<Integer> failed) {
-        if (start == s.length()) {
-            return true;
-        }
+    private boolean helper(String s, Set<String> wordDict, Set<String> failed) {
+        if (s.equals("")) return true;
+        if (failed.contains(s)) return false;
         
-        if (failed.contains(start)) {
-            return false;
-        }
-        
-        for (int i = start + 1; i <= s.length(); i++) {
-            if (wordDict.contains(s.substring(start, i))) {
-                if (helper(s, wordDict, i, failed)) {
-                    return true;
-                } else {
-                    failed.add(start);
-                }
+        for (int i = 1; i <= s.length(); i++) {
+            String next = s.substring(0, i);
+            if (wordDict.contains(next)) {
+                if (helper(s.substring(i), wordDict, failed)) return true;
             }
         }
         
+        failed.add(s);
         return false;
     }
 }
