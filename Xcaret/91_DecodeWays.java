@@ -4,15 +4,6 @@ public class Solution {
      *  Time complexity -> O(n)
      *  Space complexity -> O(n)
      */
-    private boolean isValid(String s) {
-        if (s.length() == 1) {
-            if (s.equals("0")) return false;
-            return true;
-        }
-        
-        return Integer.parseInt(s) >= 10 && Integer.parseInt(s) <= 26;
-    } 
-     
     public int numDecodings(String s) {
         if (s == null || s.length() == 0) return 0;
         
@@ -28,4 +19,8 @@ public class Solution {
         return dp[len];
     }
     
+    private boolean isValid(String s) {
+        if (s.length() == 1) return Integer.parseInt(s) >= 1 && Integer.parseInt(s) <= 9;
+        return Integer.parseInt(s) >= 10 && Integer.parseInt(s) <= 26;
+    }
 }
