@@ -18,8 +18,8 @@ public class Solution {
             }
             
             // when previous elements are smaller than the current element in the window
-            while (!queue.isEmpty() && nums[queue.peek()] < nums[i]) {
-                queue.poll();
+            while (!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {
+                queue.pollLast();
             }
             
             queue.offer(i);
