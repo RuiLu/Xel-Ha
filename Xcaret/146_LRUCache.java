@@ -6,39 +6,36 @@ public class LRUCache {
      *  2. delete any item on list
      *  3. move any item to list head
      */
-    private int capacity = 0;
-    private int count = 0;
     private Map<Integer, Item> map = null;
+    private int count = 0;
+    private int capacity = 0;
     private Item fakeHead = null;
     private Item fakeTail = null;
     
-    class Item {
+    private class Item {
         int key = 0;
-        int value = 0;
+        int val = 0;
         Item next = null;
         Item prev = null;
         
         public Item() {}
         
-        public Item(int key, int value) {
+        public Item(int key, int val) {
             this.key = key;
-            this.value = value;
+            this.val = val;
         }
     }
     
-    // first helper function
-    private void moveItemToHead(Item item) {
+    private void moveToHead(Item item) {
         deleteItem(item);
         addItem(item);
     }
     
-    // second helper function
     private void deleteItem(Item item) {
-        item.next.prev = item.prev;
         item.prev.next = item.next;
+        item.next.prev = item.prev;
     }
     
-    // third helper function
     private void addItem(Item item) {
         item.prev = fakeHead;
         item.next = fakeHead.next;
@@ -48,9 +45,8 @@ public class LRUCache {
     }
     
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-        this.count = 0;
         this.map = new HashMap<>();
+        this.capacity = capacity;
         
         fakeHead = new Item();
         fakeTail = new Item();
@@ -61,23 +57,20 @@ public class LRUCache {
     
     public int get(int key) {
         Item item = map.get(key);
-        
         if (item == null) return -1;
-        else moveItemToHead(item);
-        
-        return item.value;
+        else moveToHead(item);
+        return item.val;
     }
     
     public void set(int key, int value) {
         Item item = map.get(key);
-        
         if (item != null) {
-            item.value = value;
-            moveItemToHead(item);
+            item.val = value;
+            moveToHead(item);
         } else {
-            item = new Item(key, value);
-            map.put(key, item);
-            addItem(item);
+            Item newItem = new Item(key, value);
+            addItem(newItem);
+            map.put(key, newItem);
             count++;
             
             if (count > capacity) {
