@@ -49,4 +49,34 @@ public class Solution {
         
         return null;
     }
+    
+    /**
+     *  Idea -> First, connected one LinkedList as a circle,
+     *          Then, find the intersection using runner and walker
+     *          But we will modify the linked structure
+     */
+    // public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    //     if (headA == null || headB == null) return null;
+        
+    //     /* 1. form a circle */
+    //     ListNode iter = headA;
+    //     while (iter.next != null) iter = iter.next;
+    //     iter.next = headA;
+        
+    //     ListNode runner = headA.next;
+    //     ListNode walker = headA;
+        
+    //     /* 2. walker and runner to find intersection */
+    //     while (runner != walker) {
+    //         runner = runner.next.next;
+    //         walker = walker.next;
+    //     }
+        
+    //     while (walker != headB && headB != null) {
+    //         walker = walker.next;
+    //         headB = headB.next;
+    //     }
+        
+    //     return headB == null ? null : headB;
+    // }
 }
