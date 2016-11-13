@@ -17,11 +17,12 @@ public class Solution {
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         Map<TreeNode, TreeNode> map = new HashMap<>();
-        Deque<TreeNode> queue = new ArrayDeque<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         
-        map.put(root, null);
         queue.offer(root);
+        map.put(root, null);
         
+        /* We first use BFS to create child-parent map containing both p and q */
         while (!map.containsKey(p) || !map.containsKey(q)) {
             TreeNode node = queue.poll();
             
@@ -35,13 +36,16 @@ public class Solution {
             }
         }
         
-        Set<TreeNode> ancestors = new HashSet<>();
+        /* Then we store all p's ancenstors into Set */
+        Set<TreeNode> pAncestors = new HashSet<>();
         while (p != null) {
-            ancestors.add(p);
+            pAncestors.add(p);
             p = map.get(p);
         }
         
-        while (!ancestors.contains(q)) {
+        /* Finally, we retrieve q's ancestors to find the common ancestor */
+        while (q != null) {
+            if (pAncestors.contains(q)) break;
             q = map.get(q);
         }
         
