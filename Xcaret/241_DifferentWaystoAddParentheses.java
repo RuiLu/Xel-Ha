@@ -2,37 +2,39 @@ public class Solution {
     /**
      *  Idea -> DFS + Divide and Conquer
      *          Once found a operator, divide the input string into two parts, then do dfs, until find single number
+     *  Time complexity -> O(2^n), exponential order
      */
-    private List<Integer> dfs(String input, Map<String, List<Integer>> map) {
-        if (map.containsKey(input)) return map.get(input);
+    public List<Integer> diffWaysToCompute(String input) {
+        if (input == null || input.length() == 0) return new ArrayList<>();
+        Map<String, List<Integer>> map = new HashMap<>();
+        return helper(input, map);
+    }
+    
+    private List<Integer> helper(String s, Map<String, List<Integer>> map) {
+        if (map.containsKey(s)) return map.get(s);
         
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < input.length(); i++) {
-            char curr = input.charAt(i);
+        List<Integer> res = new ArrayList<>();
+        
+        for (int i = 0; i < s.length(); i++) {
+            char curr = s.charAt(i);
             if (curr == '+' || curr == '-' || curr == '*') {
-                // divide
-                List<Integer> left = dfs(input.substring(0, i), map);
-                List<Integer> right = dfs(input.substring(i + 1), map);
+                List<Integer> left = helper(s.substring(0, i), map);
+                List<Integer> right = helper(s.substring(i + 1), map);
                 
-                // conquer
                 for (int l : left) {
                     for (int r : right) {
-                        if (curr == '+') list.add(l + r);
-                        else if (curr == '-') list.add(l - r);
-                        else if (curr == '*') list.add(l * r);
+                        if (curr == '+') res.add(l + r);
+                        else if (curr == '-') res.add(l - r);
+                        else if (curr == '*') res.add(l * r);
                     }
                 }
             }
         }
         
-        if (list.size() == 0) list.add(Integer.parseInt(input));
-        map.put(input, list);
+        /* Means that string only contains digit(s) */
+        if (res.size() == 0) res.add(Integer.parseInt(s));
         
-        return list;
-    }
-    
-    public List<Integer> diffWaysToCompute(String input) {
-        Map<String, List<Integer>> map = new HashMap<>();
-        return dfs(input, map);
+        map.put(s, res);
+        return res;
     }
 }
