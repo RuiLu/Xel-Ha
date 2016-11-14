@@ -11,13 +11,13 @@ public class Solution {
         
         while (lo <= hi) {
             int mid = (lo + hi) / 2;
-            if (nums[mid] == target) {
-                return mid;
-            } else if (nums[mid] > target) {
+            
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] > target) {
                 if (nums[lo] <= nums[mid] && nums[lo] > target) lo = mid + 1;
                 else hi = mid - 1;
             } else {
-                if (nums[hi] >= nums[mid] && nums[hi] < target) hi = mid - 1;
+                if (nums[hi] > nums[mid] && nums[hi] < target) hi = mid - 1;
                 else lo = mid + 1;
             }
         }
