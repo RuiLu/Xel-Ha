@@ -1,12 +1,13 @@
 public class Solution {
     /**
-     *  Backtracking
+     *  Idea -> Backtracking
      *  Time complexity -> O(2^n)
      */
     public List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> res = new ArrayList<>();
         if (k > n) return res;
-        helper(res, n, k, new ArrayList<>(), 1);
+        List<Integer> tmp = new ArrayList<>();
+        helper(res, n, k, tmp, 1);
         return res;
     }
     
