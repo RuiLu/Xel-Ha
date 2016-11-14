@@ -15,39 +15,39 @@ public class Solution {
      *  Time complexity -> O(n)
      */
     public List<List<Integer>> verticalOrder(TreeNode root) {
-        List<List<Integer>> lists = new ArrayList<>();
-        if (root == null) return lists;
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
         
         int min = 0;
         int max = 0;
         Map<Integer, List<Integer>> map = new HashMap<>();
-        Queue<TreeNode> queue = new LinkedList<>();
-        Queue<Integer> levels = new LinkedList<>();
+        Queue<TreeNode> tree = new LinkedList<>();
+        Queue<Integer> level = new LinkedList<>();
         
-        queue.offer(root);
-        levels.offer(0);
+        tree.offer(root);
+        level.offer(0);
         
-        while (!queue.isEmpty()) {
-            TreeNode node = queue.poll();
-            int level = levels.poll();
-            min = Math.min(min, level);
-            max = Math.max(max, level);
+        while (!tree.isEmpty()) {
+            TreeNode curr = tree.poll();
+            int lvl = level.poll();
             
-            if (!map.containsKey(level)) map.put(level, new ArrayList<>());
-            map.get(level).add(node.val);
+            min = Math.min(min, lvl);
+            max = Math.max(max, lvl);
             
-            if (node.left != null) {
-                queue.offer(node.left);
-                levels.offer(level - 1);
+            if (!map.containsKey(lvl)) map.put(lvl, new ArrayList<>());
+            map.get(lvl).add(curr.val);
+            
+            if (curr.left != null) {
+                tree.offer(curr.left);
+                level.offer(lvl - 1);
             }
-            if (node.right != null) {
-                queue.offer(node.right);
-                levels.offer(level + 1);
+            if (curr.right != null) {
+                tree.offer(curr.right);
+                level.offer(lvl + 1);
             }
         }
         
-        for (int i = min; i <= max; i++) lists.add(map.get(i));
-        
-        return lists;
+        for (int i = min; i <= max; i++) res.add(map.get(i));
+        return res;
     }
 }
