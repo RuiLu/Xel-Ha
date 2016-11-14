@@ -1,27 +1,28 @@
 public class Solution {
     /**
-     *  Idea -> Binary search
-     *  Time complexity -> O(nlogn)
+     *  Idea -> Floyd's cycle finding algorithm (tortoise and hare) 
+     *          Existing duplicate means that there is a circle
+     *  Time complexity -> O(n)
      *  Space complexity -> O(1)
      */
     public int findDuplicate(int[] nums) {
         if (nums == null || nums.length == 0) return -1;
         
-        int lo = 0;
-        int hi = nums.length - 1;
+        int runner = 0;
+        int walker = 0;
+        int finder = 0;
         
-        while (lo <= hi) {
-            int mid = (lo + hi) / 2;
-            int count = 0;
-            
-            for (int i = 0; i < nums.length; i++) {
-                if (nums[i] <= mid) count++;
-            }
-            
-            if (count > mid) hi = mid - 1;
-            else lo = mid + 1;
+        while (true) {
+            walker = nums[walker];
+            runner = nums[nums[runner]];
+            if (walker == runner) break;
         }
         
-        return lo;
-    }
+        while (true) {
+            if (walker == finder) return walker;
+            walker = nums[walker];
+            finder = nums[finder];
+        }
+    } 
+
 }
