@@ -1,12 +1,14 @@
+/**
+ *  Self-define TrieNode
+ */
 class TrieNode {
-    // Initialize your data structure here.
     TrieNode[] next = null;
     boolean isWord = false;
     
     public TrieNode() {
         next = new TrieNode[26];
     }
-}
+} 
 
 public class Trie {
     private TrieNode root;
@@ -23,12 +25,11 @@ public class Trie {
         TrieNode node = root;
         
         for (int i = 0; i < wca.length; i++) {
-            int idx = wca[i] - 'a';
-            if (node.next[idx] == null) {
-                node.next[idx] = new TrieNode();
-            }
-            node = node.next[idx];
+            char curr = wca[i];
+            if (node.next[curr-'a'] == null) node.next[curr-'a'] = new TrieNode();
+            node = node.next[curr-'a'];
         }
+        
         node.isWord = true;
     }
 
@@ -40,9 +41,9 @@ public class Trie {
         TrieNode node = root;
         
         for (int i = 0; i < wca.length; i++) {
-            int idx = wca[i] - 'a';
-            if (node.next[idx] == null) return false;
-            node = node.next[idx];
+            char curr = wca[i];
+            if (node.next[curr-'a'] == null) return false;
+            node = node.next[curr-'a'];
         }
         
         return node.isWord;
@@ -57,11 +58,11 @@ public class Trie {
         TrieNode node = root;
         
         for (int i = 0; i < pca.length; i++) {
-            int idx = pca[i] - 'a';
-            if (node.next[idx] == null) return false;
-            node = node.next[idx];
+            char curr = pca[i];
+            if (node.next[curr-'a'] == null) return false;
+            node = node.next[curr-'a'];
         }
-       
+        
         return true;
     }
 }
