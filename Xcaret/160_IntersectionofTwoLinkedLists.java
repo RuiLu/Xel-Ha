@@ -20,27 +20,31 @@ public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
         
+        /* First, find lengths and difference */
         int lenA = 0;
         int lenB = 0;
+        int diff = 0;
         ListNode iterA = headA;
         ListNode iterB = headB;
         
         while (iterA != null) {
-            iterA = iterA.next;
             lenA++;
+            iterA = iterA.next;
         }
         while (iterB != null) {
-            iterB = iterB.next;
             lenB++;
+            iterB = iterB.next;
         }
         
-        int diff = Math.abs(lenA - lenB);
+        diff = Math.abs(lenA - lenB);
         
+        /* Second, move the longer LinkedList diff steps */
         while (diff-- > 0) {
             if (lenA > lenB) headA = headA.next;
             else headB = headB.next;
         }
         
+        /* Third, find intersection one by one */
         while (headA != null && headB != null) {
             if (headA == headB) return headA;
             headA = headA.next;
