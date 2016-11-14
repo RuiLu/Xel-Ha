@@ -7,15 +7,15 @@ public class Solution {
     public String longestCommonPrefix(String[] strs) {
         if (strs == null || strs.length == 0) return "";
         
+        int len = strs.length;
         String res = "";
         Arrays.sort(strs);
         
-        char[] first = strs[0].toCharArray();
-        char[] last = strs[strs.length - 1].toCharArray();
-        
-        for (int i = 0; i < first.length && i < last.length; i++) {
-            if (first[i] != last[i]) return res;
-            res += first[i];
+        for (int i = 0; i < strs[0].length(); i++) {
+            char c1 = strs[0].charAt(i);
+            char c2 = strs[len-1].charAt(i);
+            if (c1 == c2) res += c1;
+            else break;
         }
         
         return res;
@@ -26,24 +26,24 @@ public class Solution {
      *  Second, find the longest common prefix -> O(nk), where k is the shortest length of str
      *  Therefore, Time complexity in worst case -> O(n^2)
      */
-    public String longestCommonPrefix(String[] strs) {
-        if (strs == null || strs.length == 0) return "";
+    // public String longestCommonPrefix(String[] strs) {
+    //     if (strs == null || strs.length == 0) return "";
         
-        String res = "";
-        Arrays.sort(strs, new Comparator<String>(){
-            public int compare(String s1, String s2) {
-                return s1.length() - s2.length();
-            }  
-        });
+    //     String res = "";
+    //     Arrays.sort(strs, new Comparator<String>(){
+    //         public int compare(String s1, String s2) {
+    //             return s1.length() - s2.length();
+    //         }  
+    //     });
         
-        for (int i = 0; i < strs[0].length(); i++) {
-            char ch = strs[0].charAt(i);
-            for (int j = 1; j < strs.length; j++) {
-                if (ch != strs[j].charAt(i)) return res;
-            }
-            res += ch;
-        }
+    //     for (int i = 0; i < strs[0].length(); i++) {
+    //         char ch = strs[0].charAt(i);
+    //         for (int j = 1; j < strs.length; j++) {
+    //             if (ch != strs[j].charAt(i)) return res;
+    //         }
+    //         res += ch;
+    //     }
         
-        return res;
-    }
+    //     return res;
+    // }
 }
