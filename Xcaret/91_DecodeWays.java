@@ -1,9 +1,14 @@
 public class Solution {
     /**
-     *  Dynamic Programming
+     *  Dynamic Programming -> dp[i] = dp[i-1] + dp[i-2], dp[i-1] and dp[i-2] must satisfy their conditions
      *  Time complexity -> O(n)
      *  Space complexity -> O(n)
      */
+    private boolean isValid(String s) {
+        if (s.length() == 1) return Integer.parseInt(s) >= 1 && Integer.parseInt(s) <= 9;
+        else return Integer.parseInt(s) >= 10 && Integer.parseInt(s) <= 26;
+    } 
+     
     public int numDecodings(String s) {
         if (s == null || s.length() == 0) return 0;
         
@@ -17,10 +22,5 @@ public class Solution {
         }
         
         return dp[len];
-    }
-    
-    private boolean isValid(String s) {
-        if (s.length() == 1) return Integer.parseInt(s) >= 1 && Integer.parseInt(s) <= 9;
-        return Integer.parseInt(s) >= 10 && Integer.parseInt(s) <= 26;
     }
 }
