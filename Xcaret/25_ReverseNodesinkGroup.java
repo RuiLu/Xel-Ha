@@ -13,30 +13,30 @@ public class Solution {
      *  Reference -> https://discuss.leetcode.com/topic/5604/share-my-java-solution-with-comments-in-line
      */
     public ListNode reverseKGroup(ListNode head, int k) {
-        if (head == null || head.next == null || k < 2) return head;
+        if (head == null || head.next == null) return head;
         
         ListNode fakeHead = new ListNode(-1);
         fakeHead.next = head;
         ListNode prev = fakeHead;
         ListNode tail = fakeHead;
         ListNode temp = null;
-        int count = 0;
+        
         
         while (true) {
-            count = k;
+            int count = k;
             
-            while (count > 0 && tail != null) {
+            while (tail != null && count > 0) {
                 count--;
                 tail = tail.next;
             }
             
-            if (tail == null) break;    // traverse to the end
+            if (tail == null) break;
             
-            head = prev.next;   // prepare for next round
+            head = prev.next;
             
             while (prev.next != tail) {
                 temp = prev.next;
-                prev.next = temp.next;
+                prev.next = prev.next.next;
                 
                 temp.next = tail.next;
                 tail.next = temp;
