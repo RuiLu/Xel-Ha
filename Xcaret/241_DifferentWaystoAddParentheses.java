@@ -5,36 +5,46 @@ public class Solution {
      *  Time complexity -> O(2^n), exponential order
      */
     public List<Integer> diffWaysToCompute(String input) {
-        if (input == null || input.length() == 0) return new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
+        if (input == null || input.length() == 0) return res;
         Map<String, List<Integer>> map = new HashMap<>();
         return helper(input, map);
     }
     
-    private List<Integer> helper(String s, Map<String, List<Integer>> map) {
-        if (map.containsKey(s)) return map.get(s);
-        
+    private List<Integer> helper(String input, Map<String, List<Integer>> map) {
         List<Integer> res = new ArrayList<>();
         
-        for (int i = 0; i < s.length(); i++) {
-            char curr = s.charAt(i);
+        if (map.containsKey(input)) return map.get(input);
+        
+        for (int i = 0; i < input.length(); i++) {
+            char curr = input.charAt(i);
+            
             if (curr == '+' || curr == '-' || curr == '*') {
-                List<Integer> left = helper(s.substring(0, i), map);
-                List<Integer> right = helper(s.substring(i + 1), map);
+                List<Integer> left = helper(input.substring(0, i), map);
+                List<Integer> right = helper(input.substring(i + 1), map);
                 
                 for (int l : left) {
                     for (int r : right) {
-                        if (curr == '+') res.add(l + r);
-                        else if (curr == '-') res.add(l - r);
-                        else if (curr == '*') res.add(l * r);
+                        switch(curr) {
+                            case '+':
+                                res.add(l + r);
+                                break;
+                            case '-':
+                                res.add(l - r);
+                                break;
+                            case '*':
+                                res.add(l * r);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
         }
         
-        /* Means that string only contains digit(s) */
-        if (res.size() == 0) res.add(Integer.parseInt(s));
+        if (res.size() == 0) res.add(Integer.parseInt(input));
         
-        map.put(s, res);
         return res;
     }
 }
