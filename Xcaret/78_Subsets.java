@@ -8,19 +8,18 @@ public class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         res.add(new ArrayList<>());
-        helper(res, nums, 0, new ArrayList<>());
+        if (nums == null || nums.length == 0) return res;
+        helper(nums, res, new ArrayList<>(), 0);
         return res;
     }
     
-    private void helper(List<List<Integer>> res, int[] nums, int start, List<Integer> tmp) {
-        if (start == nums.length) {
-            return;
-        }
+    private void helper(int[] nums, List<List<Integer>> res, List<Integer> tmp, int start) {
+        if (start == nums.length) return;
         
         for (int i = start; i < nums.length; i++) {
             tmp.add(nums[i]);
             res.add(new ArrayList<>(tmp));
-            helper(res, nums, i + 1, tmp);
+            helper(nums, res, tmp, i + 1);
             tmp.remove(tmp.size() - 1);
         }
     }
