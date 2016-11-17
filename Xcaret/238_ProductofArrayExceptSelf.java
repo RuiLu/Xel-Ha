@@ -6,30 +6,33 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int[] productExceptSelf(int[] nums) {
-        int len = nums.length;
-        int[] res = new int[len];
-        int product = 1;
+        if (nums == null || nums.length == 0) return new int[0];
+        
+        int totalProduct = 1;
         int zeroCount = 0;
+        int zeroIndex = -1;
+        int[] res = new int[nums.length];
         
-        for (int num : nums) {
-            if (num == 0) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
                 zeroCount++;
-                if (zeroCount == 2) return res;
-                continue;
+                if (zeroCount == 2) break;
+                zeroIndex = i;
+            } else {
+                totalProduct *= nums[i];
             }
-            product *= num;
         }
         
-        if (zeroCount == 1) {
-            for (int i = 0; i < len; i++) {
-                if (nums[i] == 0) res[i] = product;
-            }
+        if (zeroCount >= 2) {
+            return res;
+        } else if (zeroCount == 1) {
+            res[zeroIndex] = totalProduct;
+            return res;
         } else {
-            for (int i = 0; i < len; i++) {
-                res[i] = product / nums[i];
+            for (int i = 0; i < nums.length; i++) {
+                res[i] = totalProduct / nums[i];
             }
+            return res;
         }
-        
-        return res;
     }
 }
