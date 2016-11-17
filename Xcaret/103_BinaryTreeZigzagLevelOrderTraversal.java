@@ -17,27 +17,25 @@ public class Solution {
      *  
      */
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<>();
-        if (root == null) return result;
-        zigzagTraversal(root, 0, result);
-        return result;
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        dfs(root, res, 0);
+        return res;
     }
     
-    private void zigzagTraversal(TreeNode node, int level, List<List<Integer>> result) {
+    private void dfs(TreeNode node, List<List<Integer>> res, int level) {
         if (node == null) return;
         
-        if (result.size() <= level) {
-            result.add(new ArrayList<>());
-        }
+        if (level >= res.size()) res.add(new ArrayList<>());
         
         if (level % 2 == 0) {
-            result.get(level).add(node.val);
+            res.get(level).add(node.val);
         } else {
-            result.get(level).add(0, node.val);
+            res.get(level).add(0, node.val);
         }
         
-        zigzagTraversal(node.left, level + 1, result);
-        zigzagTraversal(node.right, level + 1, result);
+        dfs(node.left, res, level + 1);
+        dfs(node.right, res, level + 1);
     }
     
     /**
@@ -50,29 +48,34 @@ public class Solution {
         if (root == null) return res;
     
         boolean toRight = false;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
         List<Integer> tmp = new ArrayList<>();
-        Stack<TreeNode> curr = new Stack<>();
-        Stack<TreeNode> next = new Stack<>();
-        curr.push(root);
+        int currLevel = 1;
+        int nextLevel = 0;
         
-        while (!curr.isEmpty()) {
-            TreeNode node = curr.pop();
-            tmp.add(node.val);
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            currLevel--;
             
-            if (toRight) {
-                if (node.right != null) next.push(node.right);
-                if (node.left != null) next.push(node.left);
-            } else {
-                if (node.left != null) next.push(node.left);
-                if (node.right != null) next.push(node.right);
+            if (!toRight) tmp.add(node.val);
+            else tmp.add(0, node.val);
+            
+            if (node.left != null) {
+                queue.offer(node.left);
+                nextLevel++;
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+                nextLevel++;
             }
             
-            if (curr.isEmpty()) {
-                curr = (Stack<TreeNode>)next.clone();
-                next.clear();
-                res.add(new ArrayList<>(tmp));
-                tmp.clear();
+            if (currLevel == 0) {
                 toRight = !toRight;
+                res.add(new ArrayList<>(tmp));
+                tmp = new ArrayList<>();
+                currLevel = nextLevel;
+                nextLevel = 0;
             }
         }
         
