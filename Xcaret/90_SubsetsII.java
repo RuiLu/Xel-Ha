@@ -7,12 +7,8 @@ public class Solution {
         List<List<Integer>> res = new ArrayList<>();
         res.add(new ArrayList<>());
         if (nums == null || nums.length == 0) return res;
-        
         Arrays.sort(nums);
-        boolean[] visited = new boolean[nums.length];
-        List<Integer> tmp = new ArrayList<>();
-        helper(res, nums, tmp, visited, 0);
-        
+        helper(res, nums, new ArrayList<>(), new boolean[nums.length], 0);
         return res;
     }
     
@@ -20,15 +16,14 @@ public class Solution {
         if (start == nums.length) return;
         
         for (int i = start; i < nums.length; i++) {
-            /* avoid duplicates */
+            /* Avoid duplicate */
             if (i > 0 && !visited[i-1] && nums[i-1] == nums[i]) continue;
-            
-            tmp.add(nums[i]);
             visited[i] = true;
+            tmp.add(nums[i]);
             res.add(new ArrayList<>(tmp));
             helper(res, nums, tmp, visited, i + 1);
-            visited[i] = false;
             tmp.remove(tmp.size() - 1);
+            visited[i] = false;
         }
     }
 }
