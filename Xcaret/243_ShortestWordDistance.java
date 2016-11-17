@@ -21,29 +21,5 @@ public class Solution {
         
         return minGap;
     } 
-     
-    /**
-     *  Idea -> Keep track of index of both word1 and word2
-     *  Time complexity -> O(n^2) (worst case)
-     */
-    public int shortestDistance(String[] words, String word1, String word2) {
-        if (words == null || words.length == 0) return 0;
-        
-        List<Integer> l1 = new ArrayList<>();
-        List<Integer> l2 = new ArrayList<>();
-        int minGap = Integer.MAX_VALUE;
-        
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].equals(word1)) l1.add(i);
-            if (words[i].equals(word2)) l2.add(i);
-        }
-        
-        for (int i1 : l1) {
-            for (int i2 : l2) {
-                minGap = Math.min(minGap, Math.abs(i1 - i2));
-            }
-        }
-        
-        return minGap;
-    }
+
 }
