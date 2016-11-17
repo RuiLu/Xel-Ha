@@ -16,14 +16,12 @@ public class Solution {
         
         while (root.left != null) {
             TreeLinkNode iter = root;
-            
             while (iter.next != null) {
                 iter.left.next = iter.right;
                 iter.right.next = iter.next.left;
                 iter = iter.next;
             }
             iter.left.next = iter.right;
-            
             root = root.left;
         }
     }
@@ -55,7 +53,7 @@ public class Solution {
             
             if (currNum > 0) {
                 node.next = queue.peek();
-            } else if (currNum == 0) {
+            } else {
                 currNum = nextNum;
                 nextNum = 0;
             }
