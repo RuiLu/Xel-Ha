@@ -21,27 +21,29 @@ public class Solution {
     public void connect(TreeLinkNode root) {
         if (root == null) return;
         
+        TreeLinkNode nextHead = null;
+        
         while (root != null) {
             TreeLinkNode iter = root;
-            TreeLinkNode nextHead = null;
             TreeLinkNode prev = null;
             
             while (iter != null) {
                 if (iter.left != null) {
+                    if (nextHead == null) nextHead = iter.left;
                     if (prev != null) prev.next = iter.left;
-                    else nextHead = iter.left;
                     prev = iter.left;
                 }
                 if (iter.right != null) {
+                    if (nextHead == null) nextHead = iter.right;
                     if (prev != null) prev.next = iter.right;
-                    else nextHead = iter.right;
                     prev = iter.right;
                 }
                 iter = iter.next;
             }
             
             root = nextHead;
-        }
+            nextHead = null;
+        } 
     } 
      
     /**
@@ -52,31 +54,29 @@ public class Solution {
     public void connect(TreeLinkNode root) {
         if (root == null) return;
         
-        Queue<TreeLinkNode> queue = new LinkedList<TreeLinkNode>();
+        Queue<TreeLinkNode> queue = new LinkedList<>();
         queue.offer(root);
-        int currLevel = 1;
-        int nextLevel = 0;
+        int curr = 1;
+        int next = 0;
         
         while (!queue.isEmpty()) {
             TreeLinkNode node = queue.poll();
-            currLevel--;
+            curr--;
             
             if (node.left != null) {
                 queue.offer(node.left);
-                nextLevel++;
+                next++;
             }
             if (node.right != null) {
                 queue.offer(node.right);
-                nextLevel++;
+                next++;
             }
             
-            if (currLevel == 0) {
-                currLevel = nextLevel;
-                nextLevel = 0;
-            } else {
-                if (!queue.isEmpty()) {
-                    node.next = queue.peek();
-                }
+            if (curr > 0) {
+                if (!queue.isEmpty()) node.next = queue.peek();
+            } else if (curr == 0) {
+                curr = next;
+                next = 0;
             }
         }
     } 
