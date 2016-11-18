@@ -12,7 +12,7 @@ public class Solution {
         
         while (lo <= hi) {
             int mid = (lo + hi) / 2;
-            if ((len - mid) <= citations[mid]) hi = mid - 1;
+            if (citations[mid] >= len - mid) hi = mid - 1;
             else lo = mid + 1;
         }
         
