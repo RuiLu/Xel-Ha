@@ -15,35 +15,30 @@ public class Solution {
         List<Interval> res = new ArrayList<>();
         if (intervals == null || intervals.size() == 0) return res;
         
-        /* sort the collections by ascending order, if start times are the same, compare end times */
+        /* Sort intervals according to their start times */
         Collections.sort(intervals, new Comparator<Interval>(){
             public int compare(Interval i1, Interval i2) {
                 if (i1.start == i2.start) return i1.end - i2.end;
                 else return i1.start - i2.start;
-            }    
+            }
         });
         
-        int start = -1;
-        int end = -1;
-        
-        for (Interval i : intervals) {
-            if (start == -1 && end == -1) {
-                start = i.start;
-                end = i.end;
-                continue;
+        int index = 0;
+        while (index < intervals.size() - 1) {
+            int start = intervals.get(index).start;
+            int end = intervals.get(index).end;
+            
+            while (index < intervals.size() && intervals.get(index).start <= end) {
+                end = Math.max(end, intervals.get(index).end);
+                index++;
             }
             
-            if (i.start > end) {
-                res.add(new Interval(start, end));
-                start = i.start;
-                end = i.end;
-            } else {
-                end = Math.max(end, i.end);
-            }
+            res.add(new Interval(start, end));
         }
         
-        /* we need to add the final one manually */
-        res.add(new Interval(start, end));
+        /* if index < intervals.size(), means that we have not considered last interval yet. 
+           So we need to add the last interval manually. */
+        if (index < intervals.size()) res.add(intervals.get(index));
         
         return res;
     }
