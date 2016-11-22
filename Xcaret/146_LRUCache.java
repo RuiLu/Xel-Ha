@@ -6,29 +6,60 @@ public class LRUCache {
      *  2. delete any item on list
      *  3. move any item to list head
      */
-    private Map<Integer, Item> map = null;
+    private class Item {
+        int key = 0;
+        int value = 0;
+        Item prev = null;
+        Item next = null;
+        
+        public Item() {}
+        
+        public Item(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+    
+    private HashMap<Integer, Item> itemMap = null;
     private int count = 0;
     private int capacity = 0;
     private Item fakeHead = null;
     private Item fakeTail = null;
     
-    private class Item {
-        int key = 0;
-        int val = 0;
-        Item next = null;
-        Item prev = null;
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        itemMap = new HashMap<>();
         
-        public Item() {}
+        fakeHead = new Item();
+        fakeTail = new Item();
         
-        public Item(int key, int val) {
-            this.key = key;
-            this.val = val;
-        }
+        fakeHead.next = fakeTail;
+        fakeTail.prev = fakeHead;
     }
     
-    private void moveToHead(Item item) {
-        deleteItem(item);
-        addItem(item);
+    public int get(int key) {
+        Item item = itemMap.get(key);
+        if (item == null) return -1;
+        else moveToHead(item);
+        return item.value;
+    }
+    
+    public void set(int key, int value) {
+        Item item = itemMap.get(key);
+        if (item != null) {
+            item.value = value;
+            moveToHead(item);
+        } else {
+            Item newItem = new Item(key, value);
+            itemMap.put(key, newItem);
+            addItem(newItem);
+            count++;
+            if (count > capacity) {
+                itemMap.remove(fakeTail.prev.key);
+                deleteItem(fakeTail.prev);
+                count--;
+            }
+        }
     }
     
     private void deleteItem(Item item) {
@@ -44,40 +75,8 @@ public class LRUCache {
         fakeHead.next = item;
     }
     
-    public LRUCache(int capacity) {
-        this.map = new HashMap<>();
-        this.capacity = capacity;
-        
-        fakeHead = new Item();
-        fakeTail = new Item();
-        
-        fakeHead.next = fakeTail;
-        fakeTail.prev = fakeHead;
-    }
-    
-    public int get(int key) {
-        Item item = map.get(key);
-        if (item == null) return -1;
-        else moveToHead(item);
-        return item.val;
-    }
-    
-    public void set(int key, int value) {
-        Item item = map.get(key);
-        if (item != null) {
-            item.val = value;
-            moveToHead(item);
-        } else {
-            Item newItem = new Item(key, value);
-            addItem(newItem);
-            map.put(key, newItem);
-            count++;
-            
-            if (count > capacity) {
-                map.remove(fakeTail.prev.key);
-                deleteItem(fakeTail.prev);
-                count--;
-            }
-        }
+    private void moveToHead(Item item) {
+        deleteItem(item);
+        addItem(item);
     }
 }
