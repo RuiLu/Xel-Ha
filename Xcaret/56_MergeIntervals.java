@@ -15,7 +15,9 @@ public class Solution {
         List<Interval> res = new ArrayList<>();
         if (intervals == null || intervals.size() == 0) return res;
         
-        /* Sort intervals according to their start times */
+        int index = 0;
+        int size = intervals.size();
+        
         Collections.sort(intervals, new Comparator<Interval>(){
             public int compare(Interval i1, Interval i2) {
                 if (i1.start == i2.start) return i1.end - i2.end;
@@ -23,12 +25,11 @@ public class Solution {
             }
         });
         
-        int index = 0;
-        while (index < intervals.size() - 1) {
+        while (index < size - 1) {
             int start = intervals.get(index).start;
             int end = intervals.get(index).end;
             
-            while (index < intervals.size() && intervals.get(index).start <= end) {
+            while (index < size && intervals.get(index).start <= end) {
                 end = Math.max(end, intervals.get(index).end);
                 index++;
             }
@@ -36,9 +37,7 @@ public class Solution {
             res.add(new Interval(start, end));
         }
         
-        /* if index < intervals.size(), means that we have not considered last interval yet. 
-           So we need to add the last interval manually. */
-        if (index < intervals.size()) res.add(intervals.get(index));
+        if (index < size) res.add(intervals.get(index));
         
         return res;
     }
