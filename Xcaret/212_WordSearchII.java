@@ -2,121 +2,66 @@ public class Solution {
     /**
      *  Idea -> Trie
      */
-    class TrieNode {
-        TrieNode[] next = null;
-        String word = null;
+    private class TrieNode {
+        TrieNode[] next;
+        String word;
         
         public TrieNode() {
             next = new TrieNode[26];
+            word = null;
         }
-    }
-    
-    private TrieNode buildTrie(String[] words) {
-        TrieNode root = new TrieNode();
-        
-        for (String word : words) {
-            TrieNode node = root;
-            
-            for (int i = 0; i < word.length(); i++) {
-                int val = word.charAt(i) - 'a';
-                if (node.next[val] == null) node.next[val] = new TrieNode();
-                node = node.next[val];
-            }
-            
-            node.word = word;
+    } 
+     
+    private void buildTrie(String word, TrieNode node) {
+        if (word == null || word.length() == 0) return;
+        char[] wca = word.toCharArray();
+        for (int i = 0; i < wca.length; i++) {
+            if (node.next[wca[i]-'a'] == null) node.next[wca[i]-'a'] = new TrieNode();
+            node = node.next[wca[i]-'a'];
         }
-        
-        return root;
+        node.word = word;
     }
-    
-    private void dfs(List<String> res, char[][] board, TrieNode node, int i, int j) {
+     
+    private void dfs(char[][] board, int i, int j, List<String> res, TrieNode node) {
         char curr = board[i][j];
-        if (curr == '#' || node.next[curr - 'a'] == null) return;
+        if (curr == '#' || node.next[curr -'a'] == null) return;
         
-        node = node.next[curr - 'a'];
+        node = node.next[curr-'a'];
         
         if (node.word != null) {
             res.add(node.word);
             node.word = null;
         }
         
+        /* We need both dfs and backtracking here */
         board[i][j] = '#';
-        if (i - 1 >= 0) dfs(res, board, node, i - 1, j);
-        if (i + 1 < board.length) dfs(res, board, node, i + 1, j);
-        if (j - 1 >= 0) dfs(res, board, node, i, j - 1);
-        if (j + 1 < board[0].length) dfs(res, board, node, i, j + 1);
+        if (i > 0) dfs(board, i - 1, j, res, node);
+        if (i < board.length - 1) dfs(board, i + 1, j, res, node);
+        if (j > 0) dfs(board, i, j - 1, res, node);
+        if (j < board[0].length - 1) dfs(board, i, j + 1, res, node);
         board[i][j] = curr;
     }
-    
+     
     public List<String> findWords(char[][] board, String[] words) {
-        List<String> res = new ArrayList<>();
+        List<String> res = new ArrayList<String>();
         if (board == null || board.length == 0 || board[0].length == 0 || words == null || words.length == 0) {
             return res;
         }
         
-        int row = board.length;
-        int col = board[0].length;
-        TrieNode root = buildTrie(words);
+        TrieNode root = new TrieNode();
         
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                dfs(res, board, root, i, j);
+        for (String word : words) {
+            buildTrie(word, root);
+        }
+        
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                dfs(board, i, j, res, root);
             }
         }
         
         return res;
     } 
      
-    /**
-     *  Idea ->  backtracking
-     *  Time Limit Exceeded
-     */
-    // public List<String> findWords(char[][] board, String[] words) {
-    //     List<String> res = new ArrayList<>();
-    //     if (board == null || board.length == 0 || board[0].length == 0 || words == null || words.length == 0) {
-    //         return res;
-    //     }
-        
-    //     int row = board.length;
-    //     int col = board[0].length;
-    //     Set<String> set = new HashSet<>();
-    //     Set<String> tmp = new HashSet<>();
-        
-    //     for (String word : words) set.add(word);
-        
-    //     for (int i = 0; i < row; i++) {
-    //         for (int j = 0; j < col; j++) {
-    //             char curr = board[i][j];
-    //             for (String word : set) {
-    //                 if (curr == word.charAt(0)) {
-    //                     if (existWord(board, new boolean[row][col], word, 0, i, j)) {
-    //                         tmp.add(word);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-        
-    //     for (String s : tmp) res.add(s);
-        
-    //     return res;
-    // }
     
-    // private boolean existWord(char[][] board, boolean[][] visited, String word, int idx, int i, int j) {
-    //     if (idx == word.length() || word.length() == 1) return true;
-    //     if (visited[i][j]) return false;
-    //     if (board[i][j] != word.charAt(idx)) return false;
-        
-    //     visited[i][j] = true;
-    //     boolean work = false;
-        
-    //     if (i - 1 >= 0) work |= existWord(board, visited, word, idx + 1, i - 1, j);
-    //     if (j - 1 >= 0) work |= existWord(board, visited, word, idx + 1, i, j - 1);
-    //     if (i + 1 < board.length) work |= existWord(board, visited, word, idx + 1, i + 1, j);
-    //     if (j + 1 < board[0].length) work |= existWord(board, visited, word, idx + 1, i, j + 1);
-        
-    //     visited[i][j] = false;
-        
-    //     return work;
-    // }
 }
