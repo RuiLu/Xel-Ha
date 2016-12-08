@@ -10,7 +10,7 @@ public class Solution {
     /**
      *  DFS
      */
-    private Map<Integer, UndirectedGraphNode> map = new HashMap<>();
+    private HashMap<Integer, UndirectedGraphNode> map = new HashMap<Integer, UndirectedGraphNode>();
     
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
         if (node == null) return null;
@@ -29,18 +29,17 @@ public class Solution {
      *  BFS -> We use Queue to store original nodes, and use HashMap to store cloned nodes.
      */
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
-        if (node == null) return null;
+        if (node == null) return node;
         
-        Queue<UndirectedGraphNode> queue = new LinkedList<>();
-        Map<Integer, UndirectedGraphNode> map = new HashMap<>();
+        Queue<UndirectedGraphNode> queue = new LinkedList<UndirectedGraphNode>();
+        HashMap<Integer, UndirectedGraphNode> map = new HashMap<Integer, UndirectedGraphNode>();
+        
         UndirectedGraphNode clone = new UndirectedGraphNode(node.label);
-        
         queue.offer(node);
         map.put(clone.label, clone);
         
         while (!queue.isEmpty()) {
             UndirectedGraphNode curr = queue.poll();
-            
             for (UndirectedGraphNode neighbor : curr.neighbors) {
                 if (!map.containsKey(neighbor.label)) {
                     map.put(neighbor.label, new UndirectedGraphNode(neighbor.label));
