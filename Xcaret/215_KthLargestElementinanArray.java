@@ -1,20 +1,5 @@
 public class Solution {
     /**
-     *  Idea -> Using a PriorityQueue to sort number.
-     *  Time complexity -> O(nlogn)
-     *  Space complexity -> O(n)
-     */
-    public int findKthLargest(int[] nums, int k) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> (b - a));
-        for (int num : nums) pq.offer(num);
-        int res = 0;
-        while (k-- > 0) {
-            res = pq.poll();
-        }
-        return res;
-    }
-    
-    /**
      *  Idea -> Using the same thought as quicksort, Divide and Conquer
      *  Time complexity -> O(n)
      *  However, time complexity of best occasion is O(N), while the worst complexity is O(N^2), how to guarantee it to O(N)?
@@ -25,14 +10,14 @@ public class Solution {
         nums[i] = nums[j];
         nums[j] = tmp;
     }
-    
+     
     private void shuffle(int[] nums) {
         Random rand = new Random();
-        for (int i = 0; i < nums.length; i++) {
+        for(int i = 0; i < nums.length; i++) {
             int r = rand.nextInt(i + 1);
             swap(nums, i, r);
         }
-    }
+    } 
     
     private int partition(int[] nums, int lo, int hi) {
         int i = lo;
@@ -48,9 +33,10 @@ public class Solution {
         swap(nums, lo, j);
         return j;
     }
-    
+     
     public int findKthLargest(int[] nums, int k) {
-        // shuffle the nums array, randonize it
+        if (nums == null || nums.length == 0 || k > nums.length) return 0;
+        
         shuffle(nums);
         
         int lo = 0;
@@ -59,11 +45,28 @@ public class Solution {
         
         while (lo <= hi) {
             int j = partition(nums, lo, hi);
-            if (j == k) break;
+            if (j == k) return nums[k];
             else if (j > k) hi = j - 1;
             else lo = j + 1;
         }
         
         return nums[k];
+    }
+    
+    /**
+     *  Idea -> Using a PriorityQueue to sort number.
+     *  Time complexity -> O(nlogn)
+     *  Space complexity -> O(n)
+     */
+    public int findKthLargest(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k > nums.length) return 0;
+        
+        int res = 0;
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>((a, b) -> b - a);
+        for (int num : nums) pq.offer(num);
+        while (k-- > 0) res = pq.poll();
+        
+        return res;
     }
 }
