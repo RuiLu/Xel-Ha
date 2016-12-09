@@ -9,15 +9,15 @@ public class Solution {
         int tmp = nums[i];
         nums[i] = nums[j];
         nums[j] = tmp;
-    }
-     
+    } 
+    
     private void shuffle(int[] nums) {
         Random rand = new Random();
-        for(int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < nums.length; i++) {
             int r = rand.nextInt(i + 1);
             swap(nums, i, r);
         }
-    } 
+    }
     
     private int partition(int[] nums, int lo, int hi) {
         int i = lo;
@@ -35,10 +35,11 @@ public class Solution {
     }
      
     public int findKthLargest(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k > nums.length) return 0;
+        if (nums == null || nums.length == 0 || nums.length < k) return 0;
         
+        /* In order to make the array totally random, we need to shuffle it first */
         shuffle(nums);
-        
+            
         int lo = 0;
         int hi = nums.length - 1;
         k = nums.length - k;
@@ -58,15 +59,15 @@ public class Solution {
      *  Time complexity -> O(nlogn)
      *  Space complexity -> O(n)
      */
-    public int findKthLargest(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k > nums.length) return 0;
+    // public int findKthLargest(int[] nums, int k) {
+    //     if (nums == null || nums.length == 0 || k > nums.length) return 0;
         
-        int res = 0;
+    //     int res = 0;
         
-        PriorityQueue<Integer> pq = new PriorityQueue<Integer>((a, b) -> b - a);
-        for (int num : nums) pq.offer(num);
-        while (k-- > 0) res = pq.poll();
+    //     PriorityQueue<Integer> pq = new PriorityQueue<Integer>((a, b) -> b - a);
+    //     for (int num : nums) pq.offer(num);
+    //     while (k-- > 0) res = pq.poll();
         
-        return res;
-    }
+    //     return res;
+    // }
 }
