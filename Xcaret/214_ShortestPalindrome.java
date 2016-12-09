@@ -19,25 +19,24 @@ public class Solution {
         
         return table;
     }
-
+    
     public String shortestPalindrome(String s) {
         if (s == null || s.length() == 0) return s;
-        
         int[] table = getTable(s + "#" + new StringBuilder(s).reverse().toString());
-        return new StringBuilder(s.substring(table[table.length - 1])).reverse().toString() + s;
+        return new StringBuilder(s.substring(table[table.length-1])).reverse().toString() + s;
     }
     
     /**
      *  Idea -> recursive
      *  Time complexity -> O(n^2)
      */
-    public String shortestPalindrome(String s) {
-        int j = 0;
-        for (int i = s.length() - 1; i >= 0; i--) {
-            if (s.charAt(j) == s.charAt(i)) j++;
-        }
-        if (s.length() == j) return s;
-        String suffix = s.substring(j);
-        return new StringBuilder(suffix).reverse().toString() + shortestPalindrome(s.substring(0, j)) + suffix;
-    }
+    // public String shortestPalindrome(String s) {
+    //     int j = 0;
+    //     for (int i = s.length() - 1; i >= 0; i--) {
+    //         if (s.charAt(j) == s.charAt(i)) j++;
+    //     }
+    //     if (s.length() == j) return s;
+    //     String suffix = s.substring(j);
+    //     return new StringBuilder(suffix).reverse().toString() + shortestPalindrome(s.substring(0, j)) + suffix;
+    // }
 }
