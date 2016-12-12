@@ -6,10 +6,10 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int findDuplicate(int[] nums) {
-        if (nums == null || nums.length == 0) return -1;
+        if (nums == null || nums.length <= 1) return -1;
         
-        int runner = 0;
         int walker = 0;
+        int runner = 0;
         int finder = 0;
         
         while (true) {
@@ -19,9 +19,9 @@ public class Solution {
         }
         
         while (true) {
-            if (walker == finder) return walker;
-            walker = nums[walker];
+            if (finder == walker) return finder;
             finder = nums[finder];
+            walker = nums[walker];
         }
     } 
 
