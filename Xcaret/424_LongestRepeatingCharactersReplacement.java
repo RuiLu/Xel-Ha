@@ -10,24 +10,24 @@ public class Solution {
     public int characterReplacement(String s, int k) {
         if (s == null || s.length() == 0) return 0;
         
-        int end = 0;
         int start = 0;
+        int end = 0;
+        int res = 0;
         int maxCharCount = 0;
         int[] counts = new int[26];
-        int res = 0;
-        char maxChar = s.charAt(0);;
+        char maxChar = s.charAt(0);
         
         for (; end < s.length(); end++) {
             char curr = s.charAt(end);
-            
             counts[curr-'A']++;
+            
             if (maxCharCount < counts[curr-'A']) {
                 maxCharCount = counts[curr-'A'];
                 maxChar = curr;
             }
             
             while (end - start + 1 - maxCharCount > k) {
-                char startChar = s.charAt(start++);
+                char startChar = s.charAt(start);
                 counts[startChar-'A']--;
                 if (startChar == maxChar) maxCharCount--;
                 for (int i = 0; i < 26; i++) {
@@ -36,6 +36,7 @@ public class Solution {
                         maxChar = (char)(i + 'A');
                     }
                 }
+                start++;
             }
             
             res = Math.max(res, end - start + 1);
