@@ -20,16 +20,20 @@ public class Solution {
         RandomListNode curr = head;
         RandomListNode next = null;
         
-        // 1. copy the original list.
+        /*
+         * First, create a copied duplicate node for each original node
+         */
         while (curr != null) {
             next = curr.next;
-            RandomListNode newNode = new RandomListNode(curr.label);
-            curr.next = newNode;
-            newNode.next = next;
+            RandomListNode copy = new RandomListNode(curr.label);
+            curr.next = copy;
+            copy.next = next;
             curr = next;
         }
         
-        // 2. copy random pointer
+        /*
+         * Second, assign random pointer to each copied node
+         */
         curr = head;
         while (curr != null) {
             if (curr.random != null) {
@@ -38,16 +42,17 @@ public class Solution {
             curr = curr.next.next;
         }
         
-        // 3. detach
+        /*
+         * Third, detach copied nodes with original nodes.
+         */
         curr = head;
         RandomListNode fakeHead = new RandomListNode(-1);
         RandomListNode iter = fakeHead;
         while (curr != null) {
             iter.next = curr.next;
             iter = iter.next;
-            
             curr.next = iter.next;
-            curr = iter.next;
+            curr = curr.next;
         }
         
         return fakeHead.next;
