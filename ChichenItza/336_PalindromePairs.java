@@ -13,7 +13,7 @@ public class Solution {
     
     /**
      *  Idea -> Using HashMap, see comments for details
-     *  Time complexity -> O(nm)
+     *  Time complexity -> O(n*m^2)
      *  Space complexity -> O(n)
      */
     public List<List<Integer>> palindromePairs(String[] words) {
