@@ -17,44 +17,46 @@ public class Solution {
      *  Space complexity -> O(n)
      */
     public List<List<Integer>> palindromePairs(String[] words) {
-        List<List<Integer>> rst = new ArrayList<>();
-        if (words == null || words.length < 2) return rst;
+        List<List<Integer>> res = new ArrayList<>();
+        if (words == null || words.length <= 1) return res;
         
         HashMap<String, Integer> map = new HashMap<>();
         
-        // put every word/index pair into map
-        for (int i = 0; i < words.length; i++) map.put(words[i], i);
+        // Put every word and its position into map
+        for (int i = 0; i < words.length; i++) {
+            map.put(words[i], i);
+        }
         
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
-            // chech every substring of every word, and see if it can form a palindrome with other word in map.
+            // Each all possible divisions for every word, and check if they can form a palindrome.
+            // For example: "lls" and "s", where "ll" is a palindrome and "s" is in map, 
+            // so "s" + "lls" is a new palindrome.
             for (int j = 0; j <= word.length(); j++) {
                 String part1 = word.substring(0, j);
                 String part2 = word.substring(j);
-                
                 if (isPalindrome(part1)) {
-                    String part2Reverse = new StringBuilder(part2).reverse().toString();
-                    if (map.containsKey(part2Reverse) && map.get(part2Reverse) != i) {
+                    String part2Rev = new StringBuilder(part2).reverse().toString();
+                    if (map.containsKey(part2Rev) && map.get(part2Rev) != i) {
                         List<Integer> tmp = new ArrayList<>();
-                        tmp.add(map.get(part2Reverse));
+                        tmp.add(map.get(part2Rev));
                         tmp.add(i);
-                        rst.add(new ArrayList<>(tmp));
+                        res.add(new ArrayList<>(tmp));
                     }
                 }
                 if (isPalindrome(part2)) {
-                    String part1Reverse = new StringBuilder(part1).reverse().toString();
-                    // check part2.length() != 0 to avoid duplicate
-                    if (map.containsKey(part1Reverse) && map.get(part1Reverse) != i && part2.length() != 0) {
+                    String part1Rev = new StringBuilder(part1).reverse().toString();
+                    if (map.containsKey(part1Rev) && map.get(part1Rev) != i && part2.length() != 0) {
                         List<Integer> tmp = new ArrayList<>();
                         tmp.add(i);
-                        tmp.add(map.get(part1Reverse));
-                        rst.add(new ArrayList<>(tmp));
+                        tmp.add(map.get(part1Rev));
+                        res.add(new ArrayList<>(tmp));
                     }
                 }
             }
         }
         
-        return rst;
+        return res;
     }
     
     /**
