@@ -31,13 +31,14 @@ public class Solution {
      *  Idea -> Recursion
      */
     public NestedInteger deserialize(String s) {
-        // If the given String is a single number, then return NestedInteger with single number directly.
+        // If the given String s is a single number.
         if (s.charAt(0) != '[') return new NestedInteger(Integer.parseInt(s));
         
         NestedInteger ni = new NestedInteger();
         int l = 1;
+        int cnt = 0;    // cnt indicates the number of  '[' and ']' pairs.
         
-        for (int r = 1, cnt = 0; r < s.length() - 1; r++) {
+        for (int r = 1; r < s.length() - 1; r++) {
             if (s.charAt(r) == '[') cnt++;
             else if (s.charAt(r) == ']') cnt--;
             else if (s.charAt(r) == ',' && cnt == 0) {
@@ -46,7 +47,8 @@ public class Solution {
             }
         }
         
-        if (l < s.length() - 1) ni.add(deserialize(s.substring(l, s.length() - 1)));
+        // If l cannot reach the end, we should deal with the substring between l and s.length()-1
+        if (l < s.length() - 1) ni.add(deserialize(s.substring(l, s.length()-1)));
         
         return ni;
     }
