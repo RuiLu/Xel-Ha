@@ -11,20 +11,20 @@ public class Solution {
      *  Space complexity -> O(n)
      */
     public int nthUglyNumber(int n) {
-        int[] ugly = new int[n];
-        int[] primes = {2, 3, 5};
-        int[] vals = {1, 1, 1};
-        int[] idx = {0, 0, 0};
+        if (n < 0) return 0;
         
+        int[] ugly = new int[n];
+        int[] indices = {0, 0, 0};
+        int[] primes = {2, 3, 5};
+        int[] values = {1, 1, 1};
         int next = 1;
         
         for (int i = 0; i < n; i++) {
             ugly[i] = next;
-            
             next = Integer.MAX_VALUE;
             for (int j = 0; j < 3; j++) {
-                if (vals[j] == ugly[i]) vals[j] = ugly[idx[j]++] * primes[j];
-                next = Math.min(next, vals[j]);
+                if (values[j] == ugly[i]) values[j] = ugly[indices[j]++] * primes[j];
+                next = Math.min(next, values[j]);
             }
         }
         
