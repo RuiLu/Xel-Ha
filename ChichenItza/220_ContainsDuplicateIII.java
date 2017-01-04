@@ -4,22 +4,18 @@ public class Solution {
      *  Time complexity -> O(nlogn)
      */ 
     public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
-        if (nums == null || nums.length == 0 || k < 1 || t < 0) {
-            return false;
-        }    
+        if (nums == null || nums.length == 0 || k < 1 || t < 0) return false;
         
         TreeSet<Long> tset = new TreeSet<>();
         
         for (int i = 0; i < nums.length; i++) {
             Long floor = tset.ceiling((long) nums[i] - t);
             Long ceiling = tset.floor((long) nums[i] + t);
-            if ((floor != null && (long) nums[i] >= floor) || (ceiling != null && ceiling >= (long) nums[i])) {
+            if ((floor != null && floor <= (long) nums[i]) || (ceiling != null && ceiling >= (long) nums[i])) {
                 return true;
             }
             tset.add((long) nums[i]);
-            if (i - k >= 0) {
-                tset.remove((long) nums[i-k]);
-            }
+            if (i-k >= 0) tset.remove((long) nums[i-k]);
         }
         
         return false;
@@ -38,21 +34,20 @@ public class Solution {
         if (nums == null || nums.length == 0 || k < 1 || t < 0) return false;
         
         HashMap<Long, Long> map = new HashMap<>();
+        long w = (long) t + 1;
         
         for (int i = 0; i < nums.length; i++) {
             long remappedNum = (long) nums[i] - Integer.MIN_VALUE;
-            long id = remappedNum / ((long) t + 1);
-            
+            long id = remappedNum / w;
             if (map.containsKey(id) ||
-                (map.containsKey(id-1) && remappedNum - map.get(id-1) <= t) ||
-                (map.containsKey(id+1) && map.get(id+1) - remappedNum <= t)) {
+                (map.containsKey(id-1) && remappedNum-map.get(id-1) <= t) ||
+                (map.containsKey(id+1) && map.get(id+1)-remappedNum <= t)) {
                 return true;        
             }
-            
             map.put(id, remappedNum);
             if (i-k >= 0) {
                 remappedNum = (long) nums[i-k] - Integer.MIN_VALUE;
-                id = remappedNum / ((long) t + 1);
+                id = remappedNum / w;
                 map.remove(id);
             }
         }
