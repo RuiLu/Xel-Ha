@@ -8,42 +8,41 @@ public class Solution {
         List<String> res = new ArrayList<>();
         if (num == null || num.length() == 0) return res;
         StringBuilder sb = new StringBuilder();
-        helper(res, sb, num, target, 0, 0, 0);
+        // first 0 is index in Integer, second 0 is eval in Long, third 0 is prev in Long
+        helper(num, res, sb, target, 0, 0, 0);
         return res;
     }
     
-    /**
-     *  Trick here is to keep the "prev", which is useful when meeting '*'
-     *  for example, when calculating 1+2+3*4, 1. 1+2+3 -> 2. 1+2+3-3 -> 3. 1+2+3*4
-     *  @eval: the current caculated value.
-     *  @prev: the caculated value from previous step.
-     */
-    private void helper(List<String> res, StringBuilder sb, String num, int target, int idx, long eval, long prev) {
+    private void helper(String num, List<String> res, StringBuilder sb, int target, int idx, long eval, long prev) {
+        // If the index reach num.length and eval is equal to target, add result
         if (idx == num.length()) {
-            if (eval == target) {
+            if (target == eval) {
                 res.add(sb.toString());
             }
         } else {
-            /* Get the current length of StringBuilder, in order to do backtracking */
+            // get the current length of sb in order for backtracking
             int len = sb.length();
-            
+            // Go through all possible combinations for numbers
             for (int i = idx; i < num.length(); i++) {
-                /* Avoid the situation that the number starts with 0, like "01" */
+                // Avoid the situation that get a number from "02"
                 if (i != idx && num.charAt(idx) == '0') break;
                 
+                // To avoid Integer overflow, we use Long here
                 long curr = Long.parseLong(num.substring(idx, i+1));
                 
-                /* If it is the first round, obviously we cannot do any operation. */
+                // If the start index is 0, then we can only add number
+                // Otherwise, we can add operators before number
                 if (idx == 0) {
-                    helper(res, sb.append(curr), num, target, i+1, curr, curr);
+                    helper(num, res, sb.append(curr), target, i+1, curr, curr);
                     sb.setLength(len);
                 } else {
-                    helper(res, sb.append("+"+curr), num, target, i+1, eval+curr, curr);
+                    helper(num, res, sb.append("+"+curr), target, i+1, eval+curr, curr);
                     sb.setLength(len);
-                    helper(res, sb.append("-"+curr), num, target, i+1, eval-curr, -curr);
+                    helper(num, res, sb.append("-"+curr), target, i+1, eval-curr, -curr);
                     sb.setLength(len);
-                    /* Trick */
-                    helper(res, sb.append("*"+curr), num, target, i+1, eval-prev+prev*curr, prev*curr);
+                    // Trick here, should minus prev before do multiplication
+                    helper(num, res, sb.append("*"+curr),
+                        target, i+1, eval-prev+prev*curr, prev*curr);
                     sb.setLength(len);
                 }
             }
