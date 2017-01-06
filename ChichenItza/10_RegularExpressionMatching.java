@@ -13,6 +13,7 @@ public class Solution {
      *  Time complexity -> O(mn)
      */
     public boolean isMatch(String s, String p) {
+        if (s == null || p == null) return false;
         
         int sLen = s.length();
         int pLen = p.length();
@@ -23,7 +24,7 @@ public class Solution {
             for (int j = 1; j <= pLen; j++) {
                 char ch = p.charAt(j-1);
                 if (ch != '*') {
-                    dp[i][j] = i > 0 && dp[i-1][j-1] && (ch == '.' || ch == s.charAt(i-1)); 
+                    dp[i][j] = i > 0 && dp[i-1][j-1] && (ch == '.' || ch == s.charAt(i-1));
                 } else {
                     dp[i][j] = (j > 1 && dp[i][j-2]) ||
                                (i > 0 && dp[i-1][j] && (p.charAt(j-2) == '.' || p.charAt(j-2) == s.charAt(i-1)));
