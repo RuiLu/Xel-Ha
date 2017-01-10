@@ -6,30 +6,25 @@ public class Solution {
      */
     public List<String> generateAbbreviations(String word) {
         List<String> res = new ArrayList<>();
-        if (word == null || word.length() == 0) {
-            res.add("");
-            return res;
-        }
-        helper(word, res, "", 0, 0);
+        if (word == null) return res;
+        backtracking(res, word, "", 0, 0);
         return res;
     }
     
     /**
-     * @curr    - current status of abbreviation 
-     * @index   - the position of current pointer
-     * @count   - the length of current abbreviation
+     * @curr    - current status of abbreviation, (uncompleted)
+     * @idx     - current position points to the original word
+     * @count   - current length of the substring that is abbreviated.
      */
-    private void helper(String word, List<String> res, String curr, int index, int count) {
-        /* If index reaches the end of word, add it into result ArrayList */
-        if (index == word.length()) {
-            /* Add count if count is bigger than 0 */
-            if (count > 0) curr += count;   
+    private void backtracking(List<String> res, String word, String curr, int idx, int count) {
+        if (idx == word.length()) {
+            if (count > 0) curr += count;
             res.add(curr);
         } else {
-            /* First case, add count and ignore the current character */
-            helper(word, res, curr, index+1, count+1);
-            /* Second case, add count and current character into current abbreviation, then reset count */
-            helper(word, res, curr+(count == 0 ? "" : count)+word.charAt(index), index+1, 0);
+            // Ignore current character
+            backtracking(res, word, curr, idx+1, count+1);
+            // Add add previous count to curr, then add current character to curr
+            backtracking(res, word, curr+(count == 0 ? "" : count)+word.charAt(idx), idx+1, 0);
         }
     }
      
