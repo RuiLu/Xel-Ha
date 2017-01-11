@@ -13,17 +13,15 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public void connect(TreeLinkNode root) {
-        while (root != null) {
+        if (root == null) return;
+        while (root.left != null) {
             TreeLinkNode iter = root;
-            TreeLinkNode prev = null;
-            while (iter != null) {
-                if (iter.left != null) {
-                    if (prev != null) prev.next = iter.left;
-                    iter.left.next = iter.right;
-                    prev = iter.right;
-                }
+            while (iter.next != null) {
+                iter.left.next = iter.right;
+                iter.right.next = iter.next.left;
                 iter = iter.next;
             }
+            iter.left.next = iter.right;
             root = root.left;
         }
     }
@@ -33,14 +31,10 @@ public class Solution {
      */
     public void connect(TreeLinkNode root) {
         if (root == null) return;
-        
         if (root.left != null) {
             root.left.next = root.right;
-            if (root.next != null) {
-                root.right.next = root.next.left;
-            }
+            if (root.next != null) root.right.next = root.next.left;
         }
-        
         connect(root.left);
         connect(root.right);
     }
