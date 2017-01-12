@@ -6,20 +6,25 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int[] singleNumber(int[] nums) {
-        if (nums == null || nums.length <= 2) return nums;
+        if (nums == null || nums.length < 2) return nums;
         
-        // pass 1 : get the XOR of the two numbers we need to find
         int diff = 0;
+        
+        // pass 1: do XOR operation to all numbers
         for (int num : nums) diff ^= num;
         
         // find the rightmost set bit
         diff &= (-diff);
         
-        // pass 2 :
-        int[] res = new int[]{0, 0};
+        int[] res = new int[2];
+        
+        // pass 2: divide nums into two groups according to set bit, do XOR operation to each group
         for (int num : nums) {
-            if ((num & diff) == 0) res[0] ^= num;   // the bit is not set
-            else res[1] ^= num;                     // the bit is set
+            if ((num&diff) == 0) {
+                res[0] ^= num;
+            } else {
+                res[1] ^= num;
+            }
         }
         
         return res;
