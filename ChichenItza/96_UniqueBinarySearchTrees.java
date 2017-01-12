@@ -16,7 +16,7 @@ public class Solution {
         
         for (int i = 2; i <= n; i++) {
             for (int j = 1; j <= i; j++) {
-                G[i] += G[j-1]*G[i-j];
+                G[i] += G[j-1] * G[i-j];
             }
         }
         
