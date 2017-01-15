@@ -1,5 +1,5 @@
 public class LFUCache {
-    
+
     /**
      *  Idea -> class Node, each node represents a appearing frequency, doubled-linked with each other, and
      *                      has a LinkedHashSet to store keys in order.
@@ -14,36 +14,109 @@ public class LFUCache {
      *          4. When adding a new node, if the size exceeds the capacity, we remove the key/value with least freqency;
      *          5. If head node with zero key, then we remove the head node.
      * 
-     *  Time complexity -> O(1)f
+     *  Time complexity -> O(1)
      */
-    
-    class Node {
-        int freq;
+
+    private class Node {
         LinkedHashSet<Integer> keys;
-        Node prev;
+        int freq;
         Node next;
+        Node prev;
         
         public Node(int freq) {
             this.freq = freq;
-            this.keys = new LinkedHashSet<Integer>();
-            this.prev = null;
-            this.next = null;
+            keys = new LinkedHashSet<>();
+            next = null;
+            prev = null;
         }
     }
-    
-    private int capacity;
+
     private Node head;
-    private HashMap<Integer, Integer> valueMap;
+    private Node tail;
+    private int capacity;
     private HashMap<Integer, Node> nodeMap;
+    private HashMap<Integer, Integer> valueMap;
+
+    /**
+     * Add a new Node before a given node. The frequency of new Node is the freqency of node + 1.
+     * 
+     * @newNode - new Node for insertion 
+     * @node    - original Node after the new Node
+     */
+    private void addBefore(Node newNode, Node node) {
+        newNode.next = node;
+        newNode.prev = node.prev;
+        
+        node.prev.next = newNode;
+        node.prev = newNode;
+    }
     
+    /**
+     * Delete a node in double-linked list
+     */
+    private void delete(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    /**
+     * Increase the frequency of given key.
+     */
+    private void increaseFreq(int key) {
+        Node oldNode = nodeMap.get(key);
+        Node newNode = null;
+        
+        /* Assume the previous frequency is k, 
+         * If there is no node with frequency k+1, add a new one.
+         * Otherwise, get node with frequency k+1 */
+        if (oldNode.prev.freq != oldNode.freq+1) {
+            newNode = new Node(oldNode.freq+1);
+            addBefore(newNode, oldNode);
+        } else {
+            newNode = oldNode.prev;
+        }
+        
+        newNode.keys.add(key);
+        nodeMap.put(key, newNode);
+        
+        /* Remove key from oldNode. If oldNode contains no keys, delete oldNode. */
+        oldNode.keys.remove(key);
+        if (oldNode.keys.size() == 0) delete(oldNode);
+    }
+
+    /**
+     * Remove the key with least frequency.
+     */
+    private void removeLastKey() {
+        /* Get the last node. */
+        Node node = tail.prev;
+        
+        int oldKey = 0;
+        for (int key : node.keys) {
+            oldKey = key;
+            break;
+        }
+        
+        node.keys.remove(oldKey);
+        nodeMap.remove(oldKey);
+        valueMap.remove(oldKey);
+        if (node.keys.size() == 0) delete(node);
+    }
+
     public LFUCache(int capacity) {
         this.capacity = capacity;
-        head = null;
-        valueMap = new HashMap<Integer, Integer>();
-        nodeMap = new HashMap<Integer, Node>();
+        nodeMap = new HashMap<>();
+        valueMap = new HashMap<>();
+        
+        head = new Node(-1);
+        tail = new Node(-1);
+        
+        head.next = tail;
+        tail.prev = head;
     }
     
     public int get(int key) {
+        /* If key already exists, update its frequency. */
         if (valueMap.containsKey(key)) {
             increaseFreq(key);
             return valueMap.get(key);
@@ -51,82 +124,31 @@ public class LFUCache {
         return -1;
     }
     
-    public void set(int key, int value) {
+    public void put(int key, int value) {
         if (capacity == 0) return;
+        
+        /* If key already exists, update its frequency. */
         if (valueMap.containsKey(key)) {
             valueMap.put(key, value);
+            increaseFreq(key);
         } else {
-            if (valueMap.size() < capacity) {
-                valueMap.put(key, value);
-            } else {
-                deleteHead();
-                valueMap.put(key, value);
+            /* If current size is equal to capacity, meaning that adding one key will cause overflow. 
+             * So remove the key with least frequency first. */
+            if (valueMap.size() >= capacity) {
+                removeLastKey();
             }
-            addToHead(key);
-        }
-        increaseFreq(key);
-    }
-    
-    private void addToHead(int key) {
-        if (head == null) {
-            head = new Node(0);
-            head.keys.add(key);
-        } else if (head.freq > 0) {
-            Node node = new Node(0);
+            
+            valueMap.put(key, value);
+            Node node = null;
+            
+            if (tail.prev.freq == 1) {
+                node = tail.prev;
+            } else {
+                node = new Node(1);
+                addBefore(node, tail);
+            }
             node.keys.add(key);
-            node.next = head;
-            head.prev = node;
-            head = node;
-        } else {
-            head.keys.add(key);
-        }
-        nodeMap.put(key, head);
-    }
-    
-    private void increaseFreq(int key) {
-        Node node = nodeMap.get(key);
-        node.keys.remove(key);
-        
-        if (node.next == null) {
-            node.next = new Node(node.freq + 1);
-            node.next.prev = node;
-            node.next.keys.add(key);
-        } else if (node.next.freq == node.freq + 1) {
-            node.next.keys.add(key);
-        } else {
-            Node tmp = new Node(node.freq + 1);
-            tmp.keys.add(key);
-            tmp.prev = node;
-            tmp.next = node.next;
-            node.next.prev = tmp;
-            node.next = tmp;
-        }
-        
-        nodeMap.put(key, node.next);
-        if (node.keys.size() == 0) remove(node);
-    }
-    
-    private void deleteHead() {
-        if (head == null) return;
-        int oldKey = 0;
-        for (int key : head.keys) {
-            oldKey = key;
-            break;
-        }
-        head.keys.remove(oldKey);
-        if (head.keys.size() == 0) remove(head);
-        valueMap.remove(oldKey);
-        nodeMap.remove(oldKey);
-    }
-    
-    private void remove(Node node) {
-        if (node.prev == null) {
-            head = node.next;
-        } else {
-            node.prev.next = node.next;
-        }
-        if (node.next != null) {
-            node.next.prev = node.prev;
+            nodeMap.put(key, node);
         }
     }
 }
@@ -135,5 +157,5 @@ public class LFUCache {
  * Your LFUCache object will be instantiated and called as such:
  * LFUCache obj = new LFUCache(capacity);
  * int param_1 = obj.get(key);
- * obj.set(key,value);
+ * obj.put(key,value);
  */
