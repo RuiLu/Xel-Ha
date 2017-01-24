@@ -5,15 +5,16 @@ public class Solution {
      *  Space complexity -> O(1)
      */
     public int findKthLargest(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k <= 0) return -1;
+        if (nums == null || nums.length == 0 || nums.length < k) return 0;
         
-        /* First of all, randonize the array, avoid the worst situation */
+        /* shuffle the original array first in order to avoid the worst case for quickselect */
         shuffle(nums);
         
-        int lo = 0;
-        int hi = nums.length-1;
-        /* change the rank, make it fit for acending order */
-        k = nums.length-k;
+        int len = nums.length;
+        int lo = 0; 
+        int hi = len-1;
+        /* because we find target element from arrays in acending order */
+        k = len-k;
         
         while (lo <= hi) {
             int j = partition(nums, lo, hi);
@@ -22,26 +23,7 @@ public class Solution {
             else lo = j+1;
         }
         
-        return -1;
-    }
-    
-    /**
-     *  Choose the element on lo as pivot, then find the ranking of the pivot.
-     *  Elements on the left of pivot should be less than pivot. Otherwise, bigger than pivot.
-     */
-    private int partition(int[] nums, int lo, int hi) {
-        int i = lo;
-        int j = hi+1;
-        
-        while (true) {
-            while (i < hi && nums[lo] > nums[++i]);
-            while (lo < j && nums[lo] < nums[--j]);
-            if (i >= j) break;
-            swap(nums, i, j);
-        }
-        swap(nums, lo, j);
-        
-        return j;
+        return nums[lo];
     }
     
     private void swap(int[] nums, int i, int j) {
@@ -58,18 +40,33 @@ public class Solution {
         }
     }
     
+    private int partition(int[] nums, int lo, int hi) {
+        int i = lo;
+        int j = hi+1;
+        
+        while (true) {
+            while (i < hi && nums[lo] > nums[++i]);
+            while (j > lo && nums[lo] < nums[--j]);
+            if (i >= j) break;
+            swap(nums, i, j);
+        }
+        swap(nums, lo, j);
+        
+        return j;
+    }
+    
     /**
      *  Idea -> Using MinHeap
      *  Time complexity -> O(nlogk)
      *  Space complexity -> O(k)
      */
     public int findKthLargest(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k <= 0) return -1;
+        if (nums == null || nums.length == 0 || nums.length < k) return 0;
         
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         
-        for (int i = 0; i < nums.length; i++) {
-            pq.offer(nums[i]);
+        for (int num : nums) {
+            pq.offer(num);
             if (pq.size() > k) pq.poll();
         }
         
