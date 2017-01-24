@@ -1,22 +1,26 @@
 public class Solution {
     /**
-     *  Idea -> Starts from up-right corner, then repeats the following three steps:
-     *          1. scan from right to left until value <= target;
-     *          2. scan from up to down until value >= target.
-     *          3. stop when find the target or overflow.
-     *  Time complexity -> O(m+n)
-     *  Space complexity -> O(1)
-     */
+     * Idea -> Key is to start from up-right corner.
+     *         Search row from right to left until find an element which is less than or equal to target.
+     *         Then search col from up to bottom until find an element which is bigger than or equal to target.
+     * Time complexity -> O(m+n)
+     * Space complexity -> O(1)
+     */ 
     public boolean searchMatrix(int[][] matrix, int target) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
         
-        int x = 0;
-        int y = matrix[0].length - 1;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        /* start searching from up-right corner */
+        int i = 0;
+        int j = n-1;
         
-        while (x < matrix.length && y >= 0) {
-            while (x < matrix.length && y >= 0 && matrix[x][y] > target) y--;
-            while (x < matrix.length && y >= 0 && matrix[x][y] < target) x++;
-            if (x < matrix.length && y >= 0 && matrix[x][y] == target) return true;
+        while (i < m && j >= 0) {
+            /* first search from right to left until element is less than or equal to target  */
+            while (i < m && j >= 0 && matrix[i][j] > target) j--;
+            /* then search from up to bottom until elment is bigger than or equal to target */
+            while (i < m && j >= 0 && matrix[i][j] < target) i++;
+            if (i < m && j >= 0 && matrix[i][j] == target) return true;
         }
         
         return false;
