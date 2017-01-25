@@ -8,32 +8,33 @@
  */
 public class Solution {
     /**
-     *  Idea -> 1. Copy each node
-     *          2. Copy random pointer   
-     *          3. Detach the original list and the duplicate list
-     *  Time complexity -> O(n)
-     *  Space complexity -> O(1)
+     * Idea -> 1. Create a duplicate node right after each node
+     *         2. Copy the random pointer, be careful with the random pointer for duplicated node
+     *         3. Then detach the original list.
+     * Time complexity -> O(n)
+     * Space complexity -> O(1)
      */
     public RandomListNode copyRandomList(RandomListNode head) {
-        if (head == null) return head;
+        if (head == null) return null;
         
+        RandomListNode fakeHead = new RandomListNode(-1);
+        fakeHead.next = head;
+        RandomListNode iter = fakeHead;
         RandomListNode curr = head;
         RandomListNode next = null;
         
-        /*
-         * First, create a copied duplicate node for each original node
-         */
+        /* pass 1 -> copy each original ListNode, and place new node right after the copied node */
         while (curr != null) {
             next = curr.next;
-            RandomListNode copy = new RandomListNode(curr.label);
-            curr.next = copy;
-            copy.next = next;
+            
+            RandomListNode newNode = new RandomListNode(curr.label);
+            curr.next = newNode;
+            newNode.next = next;
+            
             curr = next;
         }
         
-        /*
-         * Second, assign random pointer to each copied node
-         */
+        /* pass 2 -> copy random pointer for every new node */
         curr = head;
         while (curr != null) {
             if (curr.random != null) {
@@ -42,17 +43,15 @@ public class Solution {
             curr = curr.next.next;
         }
         
-        /*
-         * Third, detach copied nodes with original nodes.
-         */
+        /* pass 3 -> detach original nodes and new nodes */
         curr = head;
-        RandomListNode fakeHead = new RandomListNode(-1);
-        RandomListNode iter = fakeHead;
         while (curr != null) {
             iter.next = curr.next;
             iter = iter.next;
-            curr.next = iter.next;
-            curr = curr.next;
+            
+            next = curr.next.next;
+            curr.next = next;
+            curr = next;
         }
         
         return fakeHead.next;
