@@ -28,6 +28,7 @@ public class Solution {
         tmp.add(node.val);
         eval += node.val;
         
+        /* check whether current node is leave and eval is equal to sum. */
         if (eval == sum && node.left == null && node.right == null) {
             res.add(new ArrayList<>(tmp));
         }
