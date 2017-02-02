@@ -7,33 +7,37 @@ public class Solution {
      *         4. other characters
      */
     public int myAtoi(String str) {
+        /* check the invalid input */
         if (str == null || str.length() == 0) return 0;
         
         int sign = 1;
-        int base = 0;
-        int i = 0;
+        int sum = 0;
+        int idx = 0;
+        int len = str.length();
         
         /* 1. remove the leading whitespaces */
-        while (i < str.length() && str.charAt(i) == ' ') i++;
-        /* if str is consist of whitespaces, return 0 */
-        if (i == str.length()) return 0;
+        while (idx < len && str.charAt(idx) == ' ') idx++;
+        /* check if the string is consists of whitespace */
+        if (idx == len) return 0;
         
         /* 2. handle sign */
-        if (str.charAt(i) == '+' || str.charAt(i) == '-') {
-            /* true's value is 1, false's value is 0 */
-            sign = 1 - 2*(str.charAt(i++) == '-' ? 1 : 0);
+        if (str.charAt(idx) == '+') {
+            idx++;
+        } else if (str.charAt(idx) == '-') {
+            idx++;
+            sign = -1;
         }
         
         /* 3. number conversion */
-        while (i < str.length() && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
-            /* avoid Integer Overflow */
-            if (base > Integer.MAX_VALUE/10 || (base == Integer.MAX_VALUE/10 && str.charAt(i)-'0' > 7)) {
+        while (idx < len && str.charAt(idx) >= '0' && str.charAt(idx) <= '9') {
+            /* 4. handle Integer Overflow */
+            if (sum > Integer.MAX_VALUE/10 || (sum == Integer.MAX_VALUE/10 && str.charAt(idx)-'0' > 7)) {
                 if (sign == 1) return Integer.MAX_VALUE;
                 else if (sign == -1) return Integer.MIN_VALUE;
             }
-            base = base*10+(str.charAt(i++)-'0');
+            sum = sum*10+(str.charAt(idx++)-'0');
         }
         
-        return base*sign;
+        return sign*sum;
     }
 }
