@@ -1,101 +1,50 @@
 public class Solution {
     /**
-     *  Idea -> Only use one stack with one helper sign.
-     *          The sign record the operator before current number.
+     * Idea -> Only use one stack with one helper sign.
+     *         The sign record the operator before current number.
+     * Time complexity -> O(n)
+     * Space complexity -> O(m), where m is the count of number in the given string
      */
     public int calculate(String s) {
         if (s == null || s.length() == 0) return 0;
         
-        Stack<Integer> operands = new Stack<>();
-        char sign = '+';
+        Stack<Integer> stack = new Stack<>();
+        int res = 0;
         int num = 0;
+        char sign = '+';
         
         for (int i = 0; i < s.length(); i++) {
             char curr = s.charAt(i);
-            if (Character.isDigit(curr)) {
-                num = 10 * num + (curr - '0');
-            }
             
-            if ((!Character.isDigit(curr) && curr != ' ') || (i == s.length() - 1)) {
-                switch (sign) {
+            /* if curr is a digit, add it to num */
+            if (Character.isDigit(curr)) num = num*10+(curr-'0');
+            
+            /* if curr is not a digit or whitespace, 
+             * or pointer reaches the last position of s */
+            if ((!Character.isDigit(curr) && curr != ' ') || i == s.length()-1) {
+                switch(sign) {
                     case '+':
-                        operands.push(num);
+                        stack.push(num);
                         break;
                     case '-':
-                        operands.push(-num);
+                        stack.push(-num);
                         break;
                     case '*':
-                        operands.push(operands.pop() * num);
+                        stack.push(stack.pop()*num);
                         break;
                     case '/':
-                        operands.push(operands.pop() / num);
+                        stack.push(stack.pop()/num);
                         break;
                 }
-                
+                /* we should assign current operator to sign, and reset num */
                 sign = curr;
                 num = 0;
             }
         }
         
-        int res = 0;
-        while (!operands.isEmpty()) res += operands.pop();
+        while (!stack.isEmpty()) res += stack.pop();
         
         return res;
     } 
-     
-    /**
-     *  Idea -> Two stacks, need to determine precedence
-     */
-    public int calculate(String s) {
-        if (s == null || s.length() == 0) return 0;
-        
-        Stack<Integer> operands = new Stack<>();
-        Stack<Character> operators = new Stack<>();
-        int index = 0;
-        
-        while (index < s.length()) {
-            char curr = s.charAt(index);
-            if (Character.isDigit(curr)) {
-                int start = index;
-                while (index < s.length() && Character.isDigit(s.charAt(index))) index++;
-                operands.push(Integer.parseInt(s.substring(start, index)));
-                continue;
-            } else if (curr == '+' || curr == '-' || curr == '*' || curr == '/') {
-                while  (!operators.isEmpty() && hasPrecedence(curr, operators.peek())) {
-                    applyOps(operands, operators);
-                }
-                operators.push(curr);
-            }
-            index++;
-        }
-        
-        while (!operators.isEmpty()) applyOps(operands, operators);
-        
-        return operands.pop();
-    }
-    
-    private boolean hasPrecedence(char c1, char c2) {
-        if ((c1 == '*' || c1 =='/') && (c2 == '+' || c2 == '-')) return false;
-        return true;
-    }
-    
-    private void applyOps(Stack<Integer> operands, Stack<Character> operators) {
-        char ops = operators.pop();
-        int a = operands.pop();
-        int b = operands.pop();
-        switch (ops) {
-            case '+':
-                operands.push(a + b);
-                break;
-            case '-':
-                operands.push(b - a);
-                break;
-            case '*':
-                operands.push(a * b);
-                break;
-            case '/':
-                operands.push(b / a);
-                break;
-        }
-    }
+
 }
