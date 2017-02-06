@@ -1,101 +1,103 @@
 public class LRUCache {
+    
     /**
-     *  Idea -> Maintain a double-linked list
-     *  Time complexity -> O(1)
+     * Self-defined data structure for double-linked list
      */
     private class Node {
         int key;
+        int value;
         Node prev;
         Node next;
         
         public Node() {
+            key = 0;
+            value = 0;
             prev = null;
             next = null;
         }
         
-        public Node(int key) {
+        public Node(int key, int value) {
             this.key = key;
+            this.value = value;
             prev = null;
             next = null;
         }
     }
     
-    private HashMap<Integer, Integer> valueMap;
-    private HashMap<Integer, Node> nodeMap;
-    private Node head;
-    private Node tail;
+    private Map<Integer, Node> nodeMap;
+    private Node fakeHead;
+    private Node fakeTail;
     private int capacity;
+    private int count;
     
     /**
-     * Move the given node to head. First remove node then add it to the head.
-     */
-    private void moveNodeToHead(Node node) {
-        removeNode(node);
-        addNode(node);
-    }
-    
-    /**
-     * Add the given node to head.
+     * Add a new Node to the head of list
      */
     private void addNode(Node node) {
-        node.prev = head;
-        node.next = head.next;
+        node.prev = fakeHead;
+        node.next = fakeHead.next;
         
-        head.next.prev = node;
-        head.next = node;
+        fakeHead.next.prev = node;
+        fakeHead.next = node;
     }
     
     /**
-     * Remove the given node from double-linked list.
+     * Delete a Node from the list
      */
-    private void removeNode(Node node) {
-        node.next.prev = node.prev;
+    private void deleteNode(Node node) {
         node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+    
+    /**
+     * When update a Node, move it to the head of list
+     */
+    private void moveToHead(Node node) {
+        deleteNode(node);
+        addNode(node);
     }
     
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        valueMap = new HashMap<>();
+        this.count = 0;
         nodeMap = new HashMap<>();
         
-        head = new Node();
-        tail = new Node();
+        fakeHead = new Node();
+        fakeTail = new Node();
         
-        head.next = tail;
-        tail.prev = head;
+        fakeHead.next = fakeTail;
+        fakeTail.prev = fakeHead;
     }
     
     public int get(int key) {
-        if (valueMap.containsKey(key)) {
-            moveNodeToHead(nodeMap.get(key));
-            return valueMap.get(key);
-        }
-        return -1;
+        if (!nodeMap.containsKey(key)) return -1;
+        Node node = nodeMap.get(key);
+        moveToHead(node);
+        return node.value;
     }
     
-    public void set(int key, int value) {
-        if (capacity <= 0) return;
+    public void put(int key, int value) {
+        if (capacity == 0) return;
         
         Node node = null;
-        if (valueMap.containsKey(key)) {
+        if (nodeMap.containsKey(key)) {
             node = nodeMap.get(key);
-            moveNodeToHead(node);
+            node.value = value;
+            moveToHead(node);
         } else {
-            if (valueMap.size() >= capacity) {
-                Node deleteNode = tail.prev;
-                int deleteKey = deleteNode.key;
-                valueMap.remove(deleteKey);
-                nodeMap.remove(deleteKey);
-                removeNode(deleteNode);
-            }
-            
-            node = new Node(key);
-            nodeMap.put(key, node);
+            node = new Node(key, value);
             addNode(node);
+            count++;
             
+            if (count > capacity) {
+                /* remove the last node */
+                Node removedNode = fakeTail.prev;
+                nodeMap.remove(removedNode.key);
+                deleteNode(removedNode);
+            }
         }
         
-        valueMap.put(key, value);
+        nodeMap.put(key, node);
     }
     
 }
