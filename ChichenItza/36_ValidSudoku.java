@@ -9,23 +9,29 @@ public class Solution {
      *  Space complexity -> O(9)
      */
     public boolean isValidSudoku(char[][] board) {
-        if (board == null || board.length != 9 || board[0].length != 9) return false;
+        if (board == null || board.length == 0 || board[0].length == 0) return false;
+        
+        Set<Character> row = new HashSet<>();
+        Set<Character> col = new HashSet<>();
+        Set<Character> box = new HashSet<>();
         
         for (int i = 0; i < 9; i++) {
-            HashSet<Integer> row = new HashSet<>();
-            HashSet<Integer> col = new HashSet<>();
-            HashSet<Integer> box = new HashSet<>();
+            /* we should clear these three sets every round */
+            row.clear();
+            col.clear();
+            box.clear();
+            
             for (int j = 0; j < 9; j++) {
-                /* first, check row */
-                if (board[i][j] != '.' && !row.add(board[i][j]-'0')) return false;
+                /* check row */
+                if (board[i][j] != '.' && !row.add(board[i][j])) return false;
                 
-                /* second, check col */
-                if (board[j][i] != '.' && !col.add(board[j][i]-'0')) return false;
+                /* check col */
+                if (board[j][i] != '.' && !col.add(board[j][i])) return false;
                 
-                /* third, check box */
-                int newRow = (i/3)*3+j/3;
-                int newCol = (i%3)*3+j%3;
-                if (board[newRow][newCol] != '.' && !box.add(board[newRow][newCol]-'0')) return false;
+                /* check box, we should transform the indice */
+                int nr = (i/3)*3+j/3;
+                int nc = (i%3)*3+j%3;
+                if (board[nr][nc] != '.' && !box.add(board[nr][nc])) return false;
             }
         }
         
