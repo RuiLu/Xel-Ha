@@ -4,26 +4,23 @@ public class Solution {
      *  Time complexity -> O(2^n)
      */
     public List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
-        if (n <= 0) {
-            res.add("");
-            return res;
-        }
-        helper(res, "", n, n);
-        return res;
+       List<String> res = new ArrayList<>();
+       if (n <= 0) return res;
+       dfs(n, n, res, "");
+       return res;
     }
     
-    private void helper(List<String> res, String curr, int leftNum, int rightNum) {
-        // we have consumed all given parentheses, so add curr into res.
+    private void dfs(int leftNum, int rightNum, List<String> res, String str) {
+        /* all left and right parentheses are used up */
         if (leftNum == 0 && rightNum == 0) {
-            res.add(curr);
+            res.add(str);
             return;
         }
         
-        // if leftNum > 0, we can always add '(' into curr
-        if (leftNum > 0) helper(res, curr+"(", leftNum-1, rightNum);
-        // only if rightNum > 0 and rightNum > leftNum, meaning that there are more '(' than ')' in curr,
-        // we can add ')' into curr
-        if (rightNum > 0 && rightNum > leftNum) helper(res, curr+")", leftNum, rightNum-1);
+        /* if there are available '(', then append '(' to str */
+        if (leftNum > 0) dfs(leftNum-1, rightNum, res, str+"(");
+        /* if there are available ')', and the remaining ')' is more then the remaining '(',
+         * then append ')' to str */
+        if (rightNum > 0 && rightNum > leftNum) dfs(leftNum, rightNum-1, res, str+")");
     }
 }
